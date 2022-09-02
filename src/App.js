@@ -1,7 +1,7 @@
 import { Grommet, Sidebar, Avatar, Button, Nav, Box, Heading } from "grommet";
 import * as Icons from "grommet-icons";
 import AvatarImg from "./assets/Avatar.jpeg";
-// import styled from "styled-components";
+import { Welcome } from "./pages/Welcome";
 
 const theme = {
   global: {
@@ -35,7 +35,7 @@ function App() {
           header={
             <Box pad="small" direction="row" justify="around" align="center">
               <Avatar src={AvatarImg} />
-              <Heading>Web3</Heading>
+              <Heading>WEB3</Heading>
             </Box>
           }
           footer={
@@ -48,6 +48,7 @@ function App() {
             <SidebarButton icon={<Icons.Projects />} label="A Little Practice" />
           </Nav>
         </Sidebar>
+        <Welcome />
       </Box>
     </Grommet>
   );
