@@ -1,5 +1,7 @@
-import { Grommet, Sidebar, Avatar, Button, Nav, Box } from "grommet";
+import { Grommet, Sidebar, Avatar, Button, Nav, Box, Heading } from "grommet";
 import * as Icons from "grommet-icons";
+import AvatarImg from "./assets/Avatar.jpeg";
+// import styled from "styled-components";
 
 const theme = {
   global: {
@@ -8,27 +10,44 @@ const theme = {
       size: '18px',
       height: '20px',
     },
-  },
+  }
 };
+
+const SidebarButton = ({ icon, label, ...rest }) => (
+  <Box pad="small">
+    <Button
+      gap="medium"
+      alignSelf="start"
+      plain
+      icon={icon}
+      label={label}
+      {...rest}
+    />
+  </Box>
+);
 
 
 function App() {
   return (
-    <Grommet theme={theme} style={{height: "100vh"}}>
-      <Box direction="row" height={{ min: '100%' }}>
-      <Sidebar background="brand" round="small"
-        header={
-          <Avatar src="//s.gravatar.com/avatar/b7fb138d53ba0f573212ccce38a7c43b?s=80" />
-        }
-        footer={
-          <Button icon={<Icons.Help />} hoverIndicator />
-        }
-      >
-        <Nav gap="small">
-          <Button icon={<Icons.Projects />} hoverIndicator />
-          <Button icon={<Icons.Clock />} hoverIndicator />
-        </Nav>
-      </Sidebar>
+    <Grommet theme={theme} style={{ height: "100vh" }}>
+      <Box direction="row" height={{ min: '100%' }} background="light-3">
+        <Sidebar background="neutral-3" responsive
+          header={
+            <Box pad="small" direction="row" justify="around" align="center">
+              <Avatar src={AvatarImg} />
+              <Heading>Web3</Heading>
+            </Box>
+          }
+          footer={
+            <SidebarButton icon={<Icons.User />} label="About Me" />
+          }
+        >
+          <Nav gap="small">
+            <SidebarButton icon={<Icons.Blog />} label="In My Point Of View" />
+            <SidebarButton icon={<Icons.Article />} label="Others Said" />
+            <SidebarButton icon={<Icons.Projects />} label="A Little Practice" />
+          </Nav>
+        </Sidebar>
       </Box>
     </Grommet>
   );
