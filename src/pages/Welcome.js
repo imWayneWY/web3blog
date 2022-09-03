@@ -23,7 +23,7 @@ const LoginButton = styled(Image)`
 	}
 `;
 
-export const Welcome = memo(() => {
+export const Welcome = memo(({onConnect}) => {
 	const handleReqAccount = useCallback(async (e) => {
 		e.preventDefault();
 
@@ -60,8 +60,8 @@ export const Welcome = memo(() => {
 
 		const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
 		const userAddress = ethers.utils.getAddress(accounts[0]);
-		console.log("get address: ", userAddress);
-	})
+		onConnect(userAddress);
+	}, [onConnect])
 	return <Box pad="medium">
 		<Heading>Welcome! If you are new to WEB3</Heading>
 		<Paragraph>This Blog is building with web3 techs and you need a wallet to connect.</Paragraph>
