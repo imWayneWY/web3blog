@@ -1,9 +1,10 @@
 import { Grommet, Sidebar, Avatar, Button, Nav, Box, Heading } from "grommet";
-import * as Icons from "grommet-icons";
+import { User, Article, Projects, Blog} from "grommet-icons";
 import { useEffect, useState } from "react";
 import AvatarImg from "./assets/Avatar.jpeg";
 import { Welcome } from "./pages/Welcome";
 import { ethers } from "ethers";
+import { List } from "./pages/List";
 const theme = {
   global: {
     font: {
@@ -74,17 +75,17 @@ function App() {
             </Box>
           }
           footer={
-            <SidebarButton icon={<Icons.User />} label="About Me" />
+            <SidebarButton icon={<User />} label="About Me" />
           }
         >
           <Nav gap="small">
-            <SidebarButton icon={<Icons.Blog />} label="In My Point Of View" />
-            <SidebarButton icon={<Icons.Article />} label="Others Said" />
-            <SidebarButton icon={<Icons.Projects />} label="A Little Practice" />
+            <SidebarButton icon={<Blog />} label="In My Point Of View" />
+            <SidebarButton icon={<Article />} label="Others Said" />
+            <SidebarButton icon={<Projects />} label="A Little Practice" />
           </Nav>
         </Sidebar>
         {
-          selectedAddress ? <div>{selectedAddress}</div> : <Welcome onConnect={setSelectedAddress} />
+          selectedAddress ? <List items={[]} /> : <Welcome onConnect={setSelectedAddress} />
         }
       </Box>
     </Grommet>
