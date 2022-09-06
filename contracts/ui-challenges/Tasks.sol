@@ -5,7 +5,7 @@ pragma solidity ^0.8.15;
 contract TaskContract {
 
     event AddTask(address recipient, uint taskId);
-    event DeleteTask(uint taskId, bool isDeleted);
+    event DeleteTask(uint taskId);
 
     struct Task {
         uint id;
@@ -20,9 +20,9 @@ contract TaskContract {
     mapping(uint256 => address) taskToOwner;
 
     // Method to be called by our frontend when trying to add a new Tweet
-    function addTask(string memory taskText, bool isDeleted) external {
+    function addTask(string memory taskText) external {
         uint taskId = tasks.length;
-        tasks.push(Task(taskId, msg.sender, taskText, isDeleted));
+        tasks.push(Task(taskId, msg.sender, taskText, false));
         taskToOwner[taskId] = msg.sender;
         emit AddTask(msg.sender, taskId);
     }
@@ -32,7 +32,7 @@ contract TaskContract {
         Task[] memory temporary = new Task[](tasks.length);
         uint counter = 0;
         for(uint i=0; i<tasks.length; i++) {
-            if(taskToOwner[i] == msg.sender && tasks[i].isDeleted == false) {
+            if(taskToOwner[i] == msg.sender) {
                 temporary[counter] = tasks[i];
                 counter++;
             }
@@ -46,10 +46,10 @@ contract TaskContract {
     }
 
     // Method to Delete a Tweet
-    function deleteTask(uint taskId, bool isDeleted) external {
+    function deleteTask(uint taskId) external {
         if(taskToOwner[taskId] == msg.sender) {
-            tasks[taskId].isDeleted = isDeleted;
-            emit DeleteTask(taskId, isDeleted);
+            tasks[taskId].isDeleted = true;
+            emit DeleteTask(taskId);
         }
     }
 
