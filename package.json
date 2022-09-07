@@ -2,12 +2,14 @@
   "name": "web3-blog",
   "version": "0.1.0",
   "private": true,
+  "homepage": "https://imwaynewy.github.io/web3blog/",
   "dependencies": {
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
     "@uiw/react-md-editor": "^3.18.1",
     "ethers": "^5.7.0",
+    "gh-pages": "^4.0.0",
     "grommet": "^2.25.3",
     "grommet-icons": "^4.8.0",
     "ipfs-http-client": "^58.0.0",
@@ -21,6 +23,8 @@
   "scripts": {
     "start": "react-scripts start",
     "build": "react-scripts build",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
