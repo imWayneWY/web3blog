@@ -1,4 +1,4 @@
-import { BigNumber, ethers } from "ethers";
+import { ethers } from "ethers";
 import { memo, useState, useEffect, useCallback } from "react";
 import { useWallet } from "../../hooks/useWallet";
 import TasksAbi from "../../abi/Tasks.json";
