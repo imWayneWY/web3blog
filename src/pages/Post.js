@@ -5,11 +5,9 @@ import styled from "styled-components";
 import { create as ipfsHttpClient } from 'ipfs-http-client';
 import { useWallet } from "../hooks/useWallet";
 import { Buffer } from 'buffer';
-import * as dotenv from "dotenv";
-dotenv.config();
 
-const projectId = process.env.PROJECT_ID;
-const projectSecret = process.env.PROJECT_ID;
+const projectId = process.env.REACT_APP_PROJECT_ID;
+const projectSecret = process.env.REACT_APP_PROJECT_ID;
 
 const auth =
     'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');

@@ -9,7 +9,6 @@
     "@testing-library/user-event": "^13.2.1",
     "@uiw/react-md-editor": "^3.18.1",
     "buffer": "^6.0.3",
-    "dotenv": "^16.0.2",
     "ethers": "^5.7.0",
     "gh-pages": "^4.0.0",
     "grommet": "^2.25.3",
