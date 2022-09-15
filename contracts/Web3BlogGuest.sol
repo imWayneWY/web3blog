@@ -16,7 +16,7 @@ contract Web3Blog is ERC721, ERC721URIStorage, Ownable {
     mapping(uint256 => bytes) private blogTitles;
     event BlogCreated(address recipient, uint256 tokenId, string tokenURI);
 
-    constructor() ERC721("NudeNFT", "NUDENFT") {
+    constructor() ERC721("W3B2", "WEB3BLOG2") {
         blogOwner = payable(msg.sender);
     }
 
@@ -58,6 +58,14 @@ contract Web3Blog is ERC721, ERC721URIStorage, Ownable {
         
         return titles;
     }
+
+	function deleteBlog(uint256 tokenId) 
+		public
+		onlyOwner
+	{
+		blogTitles[tokenId] = "Deleted Article";
+		_burn((tokenId));
+	}
 
     function _burn(uint256 tokenId)
         internal

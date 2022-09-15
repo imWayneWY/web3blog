@@ -35,7 +35,6 @@ export const Detail = memo(() => {
 				const URI = await contract.tokenURI(location.state.id);
 				const response = await fetch(URI);
 				const data = await response.json();
-				console.log(data);
 				setDate(data.date);
 				setAuthor(data.author);
 				setValue(data.value);
