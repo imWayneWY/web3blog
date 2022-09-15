@@ -64,7 +64,7 @@ export const Post = () => {
 		}
  	}, [contract, selectedAddress, title, value]);
 	return (
-		<Box width='100%' height='100vh' justify="between">
+		<Box flex="grow" height='100vh' justify="between">
 			<TextInput placeholder="Input your blog title" onChange={handleUpdate} value={title} />
 			<MDEditor
 				height='90%'

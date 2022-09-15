@@ -13,7 +13,7 @@ export const BlogList = memo(({ items }) => {
 	const handleClick = useCallback(({item, index}) => {
 		navigate("/detail", {state: {id: index + 1, title: item}});
 	}, [navigate]);
-	return <Box pad="medium" align="center" justify="center" flex="grow">
+	return <Box pad="medium" align="center" justify="start" flex="grow">
 		{
 			items?.length
 				? <TenItemList
