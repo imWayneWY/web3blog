@@ -10,6 +10,9 @@ export const Main = memo(() => {
 	const { signer } = useWallet();
 	const [contract, setContract] = useState();
 	const [items, setItems] = useState([]);
+	const [totalBlogsCount, setTotalBlogsCount] = useState(11);
+	const [currentPage, setCurrentPage] = useState(1);
+
 	useEffect(() => {
 		if (!signer) return;
 		const BlogContract = new ethers.Contract(
@@ -34,5 +37,5 @@ export const Main = memo(() => {
 		}
 		fetchTitles();
 	}, [contract]);
-	return <BlogList items={items} />;
+	return <BlogList items={items} currentPage={currentPage} totalBlogsCount={totalBlogsCount}/>;
 })
