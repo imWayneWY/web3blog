@@ -60,6 +60,14 @@ contract Web3Blog is ERC721, ERC721URIStorage, Ownable {
         return titles;
     }
 
+    function getCount()
+        public
+        view
+        returns (uint256)
+    {
+        return blogIdCounter.current();
+    }
+
     function _burn(uint256 tokenId)
         internal
         override(ERC721, ERC721URIStorage)

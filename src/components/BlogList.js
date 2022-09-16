@@ -11,8 +11,8 @@ const TenItemList = styled(List)`
 export const BlogList = memo(({ items }) => {
 	const navigate = useNavigate();
 	const handleClick = useCallback(({item, index}) => {
-		navigate("/detail", {state: {id: index + 1, title: item}});
-	}, [navigate]);
+		navigate("/detail", {state: {id: items.length - index, title: item}});
+	}, [items.length, navigate]);
 	return <Box pad="medium" align="center" justify="start" flex="grow">
 		{
 			items?.length
