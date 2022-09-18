@@ -54,9 +54,9 @@ function App() {
           >
             <Nav gap="small">
               <SidebarButton icon={<Blog />} label="In My Point Of View" onClick={() => handleNavigate("/")} />
-              <SidebarButton icon={<Article />} label="Others Said" />
+              <SidebarButton icon={<Article />} label="Others Said"  onClick={() => handleNavigate("/others")} />
               <SidebarButton icon={<Edit />} label="Post My Thought" onClick={() => handleNavigate("/post")} />
-              <SidebarButton icon={<Projects />} label="A Little Practice" />
+              <SidebarButton icon={<Projects />} label="A Little Practice" onClick={() => handleNavigate("/demos")} />
             </Nav>
           </Sidebar>
           {
