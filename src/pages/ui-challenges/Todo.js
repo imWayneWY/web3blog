@@ -7,10 +7,8 @@ import styled, { css } from "styled-components";
 const TasksContractAddress = "0xF6E430c546b1DF82Eb524984DFeb7bb60396615e";
 
 const Container = styled.div`
-	flex: 1;
 	height: 100%;
 	box-sizing: border-box;
-	padding: 20px;
 	font-size: 18px;
 `;
 

@@ -95,9 +95,9 @@ export const Calendar = memo(() => {
 		setFullDays(getFullDays(currentDay));
 	}, [currentDay]);
 
-	return <Box flex="grow" pad="medium">
+	return <>
 		<MonthView fulldays={fullDays} month={currentDay.getMonth()} currentDay={currentDay} setCurrentDay={setCurrentDay}/>
-	</Box>;
+	</>;
 });
 
 function getFullDays(currentDay) {

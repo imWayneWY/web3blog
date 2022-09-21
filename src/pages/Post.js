@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from "react";
 import MDEditor from '@uiw/react-md-editor';
-import { Box, Button, TextInput } from "grommet";
+import { Button, TextInput } from "grommet";
 import styled from "styled-components";
 import { create as ipfsHttpClient } from 'ipfs-http-client';
 import { useWallet } from "../hooks/useWallet";
@@ -64,7 +64,7 @@ export const Post = () => {
 		}
  	}, [contract, selectedAddress, title, value]);
 	return (
-		<Box flex="grow" height='100vh' justify="between">
+		<>
 			<TextInput placeholder="Input your blog title" onChange={handleUpdate} value={title} />
 			<MDEditor
 				height='90%'
@@ -72,6 +72,6 @@ export const Post = () => {
 				onChange={setValue}
 			/>
 			<PostButton label="POST" color="neutral-3" primary size="large" onClick={handlePost} />
-		</Box>
+		</>
 	);
 }

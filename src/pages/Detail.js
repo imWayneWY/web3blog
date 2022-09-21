@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 import { useWallet } from "../hooks/useWallet";
 import BlogAbi from "../abi/Web3Blog.json";
 import { ethers } from "ethers";
-import { Markdown, Heading, Text, Box } from "grommet";
+import { Markdown, Heading, Text } from "grommet";
 
 
 const BlogAddress = "0x2FC33901Ee4c5A790C2Ef7977B5cDc562CF6a045";
@@ -47,10 +47,10 @@ export const Detail = memo(() => {
 		fetchURI();
 	}, [contract, location.state.id, location.state.title]);
 
-	return <Box pad="medium" flex="grow" direction="column">
+	return <>
 		<Heading>{title}</Heading>
 		<Text>Author: {author}</Text>
 		<Text>{new Date(date).toLocaleDateString()}</Text>
 		<Markdown style={{marginTop: "20px"}}>{value}</Markdown>
-	</Box>;
+	</>;
 });

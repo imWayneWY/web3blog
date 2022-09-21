@@ -1,4 +1,4 @@
-import { Box, Heading, Paragraph, Anchor, Image } from "grommet";
+import { Heading, Paragraph, Anchor, Image } from "grommet";
 import { memo, useCallback } from "react";
 import MetaMaskImg from "./../assets/MetaMask.svg";
 import styled from "styled-components";
@@ -60,11 +60,11 @@ export const Welcome = memo(({onConnect}) => {
 
 		window.ethereum.request({ method: "eth_requestAccounts" });
 	}, [])
-	return <Box pad="medium">
+	return <>
 		<Heading>Welcome! If you are new to WEB3</Heading>
 		<Paragraph>This Blog is building with web3 techs and you need a wallet to connect.</Paragraph>
 		<Paragraph>Please install <Anchor target="_blank" href="https://metamask.io/" label="MetaMask" /> for browsing.</Paragraph>
 		<Paragraph>If you already have MetaMask installed, please click the button below to login.</Paragraph>
 		<LoginButton src={MetaMaskImg} onClick={handleReqAccount} />
-	</Box>
+	</>
 });

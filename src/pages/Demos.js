@@ -1,4 +1,4 @@
-import { List, Box} from "grommet";
+import { List } from "grommet";
 import { memo, useCallback } from "react";
 import styled from "styled-components";
 import { useNavigate } from "react-router-dom"
@@ -21,12 +21,12 @@ export const Demos = memo(() => {
 		navigate(item.url);
 	}, [navigate]);
 
-	return <Box flex="grow" pad="medium" overflow="auto">
+	return <>
 		<DemoList
 			data={DEMOS}
 			primaryKey="title"
 			onClickItem={handleClick}
 			pad="medium"
 		/>
-	</Box>
+	</>
 });
