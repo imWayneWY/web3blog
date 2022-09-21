@@ -11,6 +11,10 @@ const DEMOS = [
 	{
 		title: "Todo",
 		url: "/todo"
+	},
+	{
+		title: "Calendar",
+		url: "/calendar"
 	}
 ]
 

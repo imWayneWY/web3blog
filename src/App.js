@@ -59,7 +59,7 @@ function App() {
               <SidebarButton icon={<Projects />} label="A Little Practice" onClick={() => handleNavigate("/demos")} />
             </Nav>
           </Sidebar>
-          <Box flex="grow" pad="medium">
+          <Box flex="grow" pad="medium" overflow="auto" height="100vh">
             {
               selectedAddress ? <Router /> : <Welcome />
             }
