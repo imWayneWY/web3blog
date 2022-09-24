@@ -1,9 +1,10 @@
-import { memo, useEffect, useState } from "react";
+import { memo, useCallback, useEffect, useState } from "react";
 import styled, { css } from "styled-components";
-import {Box} from "grommet";
 
-const MonthHeader = styled.h2`
-	text-align: center;
+const MonthHeader = styled.div`
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
 `;
 
 const MonthGrid = styled.div`
@@ -40,6 +41,25 @@ const WeekHeader = styled.div`
 	margin: 20px 0;
 `;
 
+const MonthTitle = styled.h2`
+	margin: 0;
+`;
+const YearTitle = styled.h2`
+	margin: 0;
+`;
+
+const MonthSelector = styled.span`
+	font-size: 30px;
+	font-weight: bolder;
+	width: 30%;
+	text-align: center;
+	cursor: pointer;
+	user-select: none;
+`;
+
+const PrevMonth = styled(MonthSelector)``;
+const NextMonth = styled(MonthSelector)``;
+
 const MONTHS = [
 	"JAN",
 	"FEB",
@@ -66,8 +86,32 @@ const WEEKS = [
 ]
 
 const MonthView = memo(({fulldays, month, currentDay, setCurrentDay}) => {
+	const selectPrevMonth = useCallback(() => {
+		const month = currentDay.getMonth();
+		if (month === 0) {
+			const year = currentDay.getFullYear() - 1;
+			setCurrentDay(new Date(year, 11, 1));
+		} else {
+			setCurrentDay(new Date(currentDay.getFullYear(), month-1, 1));
+		}
+	}, [setCurrentDay, currentDay]);
+
+	const selectNextMonth = useCallback(() => {
+		const month = currentDay.getMonth();
+		if (month === 11) {
+			const year = currentDay.getFullYear() + 1;
+			setCurrentDay(new Date(year, 0, 1));
+		} else {
+			setCurrentDay(new Date(currentDay.getFullYear(), month+1, 1));
+		}
+	}, [setCurrentDay, currentDay]);
 	return <>
-		<MonthHeader>{MONTHS[month]}</MonthHeader>
+		<MonthHeader>
+			<PrevMonth onClick={selectPrevMonth}>{"<"}</PrevMonth>
+			<MonthTitle>{MONTHS[month]}</MonthTitle>
+			<YearTitle>{currentDay.getFullYear()}</YearTitle>
+			<NextMonth onClick={selectNextMonth}>{">"}</NextMonth>
+		</MonthHeader>
 		<WeekHeader>
 			{WEEKS.map(w => (<HeaderItem key={w}>{w}</HeaderItem>))}
 		</WeekHeader>
@@ -86,17 +130,26 @@ const MonthView = memo(({fulldays, month, currentDay, setCurrentDay}) => {
 	</>;
 });
 
+const DayView = memo(() => {
+	return <></>;
+});
+
 export const Calendar = memo(() => {
 	const [currentDay, setCurrentDay] = useState(new Date(Date.now()));
 	const [fullDays, setFullDays] = useState([]); // full days of a month
-	const [isMonthView, setIsMonthView] = useState(true);
 
 	useEffect(() => {
 		setFullDays(getFullDays(currentDay));
 	}, [currentDay]);
 
 	return <>
-		<MonthView fulldays={fullDays} month={currentDay.getMonth()} currentDay={currentDay} setCurrentDay={setCurrentDay}/>
+		<MonthView
+			fulldays={fullDays}
+			month={currentDay.getMonth()}
+			currentDay={currentDay}
+			setCurrentDay={setCurrentDay}
+		/>
+		<DayView items = {[]} />
 	</>;
 });
 

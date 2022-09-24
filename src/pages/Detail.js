@@ -1,12 +1,11 @@
 import { memo, useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useWallet } from "../hooks/useWallet";
-import BlogAbi from "../abi/Web3Blog.json";
+import BlogAbi from "../abi/Web3BlogOwner.json";
 import { ethers } from "ethers";
 import { Markdown, Heading, Text } from "grommet";
+import { BlogAddress } from "../utils/address";
 
-
-const BlogAddress = "0x2FC33901Ee4c5A790C2Ef7977B5cDc562CF6a045";
 
 export const Detail = memo(() => {
 	const { signer } = useWallet();

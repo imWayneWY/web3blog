@@ -33,6 +33,7 @@ contract CalendarContract {
         return result;
 	}
 
+	// shoot, typo here
 	function _isConfict(uint startTime1, uint startTime2, uint endTime1, uint endTime2) internal pure returns (bool) {
 		if (
 			(startTime1 > startTime2 && startTime1 < endTime2)

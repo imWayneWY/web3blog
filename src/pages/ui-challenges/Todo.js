@@ -3,8 +3,7 @@ import { memo, useState, useEffect, useCallback } from "react";
 import { useWallet } from "../../hooks/useWallet";
 import TasksAbi from "../../abi/Tasks.json";
 import styled, { css } from "styled-components";
-
-const TasksContractAddress = "0xF6E430c546b1DF82Eb524984DFeb7bb60396615e";
+import { TasksContractAddress } from "../../utils/address";
 
 const Container = styled.div`
 	height: 100%;

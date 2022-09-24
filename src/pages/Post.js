@@ -5,10 +5,9 @@ import styled from "styled-components";
 import { create as ipfsHttpClient } from 'ipfs-http-client';
 import { useWallet } from "../hooks/useWallet";
 import { Buffer } from 'buffer';
-import BlogAbi from "../abi/Web3Blog.json";
+import BlogAbi from "../abi/Web3BlogOwner.json";
+import { BlogAddress } from "../utils/address";
 import { ethers } from "ethers";
-
-const BlogAddress = "0x2FC33901Ee4c5A790C2Ef7977B5cDc562CF6a045";
 
 const projectId = process.env.REACT_APP_PROJECT_ID;
 const projectSecret = process.env.REACT_APP_PROJECT_SECRET;
