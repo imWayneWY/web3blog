@@ -87,6 +87,8 @@ const Msg = styled.p`
 	color: orange;
 `;
 
+const ItemsWrapper = styled.ul``;
+
 const MONTHS = [
 	"JAN",
 	"FEB",
@@ -174,11 +176,27 @@ const DayView = memo(({items, currentDay, contract}) => {
 			const endTimeStamp = Number(new Date(currentDay.toDateString()+" "+endTime));
 			if (isNaN(startTimeStamp) || isNaN(endTimeStamp) || endTimeStamp <= startTimeStamp) {
 				setMsg("Invalid Time");
+				return;
+			}
+			if (isConflict(items, startTimeStamp, endTimeStamp)) {
+				setMsg("Conflict TIme");
+				return;
 			}
 			contract.addEvent(trimedDescValue, startTimeStamp, endTimeStamp);
+			setMsg("");
 			setDesc("");
 		}
-	}, [desc, contract, currentDay, startTime, endTime]);
+	}, [desc, contract, currentDay, startTime, endTime, items]);
+
+	useEffect(() => {
+		const setError = () => setMsg("Add event failed");
+		if (contract) {
+			contract.on("EventFailed", setError);
+		}
+		return () => {
+			contract.off("EventFailed", setError);
+		}
+	})
 
 	return <>
 		<NewEventInputWrapper>
@@ -188,12 +206,22 @@ const DayView = memo(({items, currentDay, contract}) => {
 			<SubmintButton onClick={createEvent}>Create</SubmintButton>
 		</NewEventInputWrapper>
 		{msg && <Msg>{msg}</Msg>}
+		<ItemsWrapper>
+			{
+				items.map((item) => {
+					const startTimeDate = new Date(item.startTime.toNumber());
+					const endTimeDate = new Date(item.endTime.toNumber());
+
+					return <li key={item.id}>{`${item.eventText}: from ${startTimeDate.toLocaleTimeString()} to ${endTimeDate.toLocaleTimeString()}`}</li>
+				})
+			}
+		</ItemsWrapper>
 	</>;
 });
 
 export const Calendar = memo(() => {
 	const [contract, setContract] = useState();
-	const [evnets, setEvents] = useState([]);
+	const [events, setEvents] = useState([]);
 	const [currentDay, setCurrentDay] = useState(new Date(Date.now()));
 	const [fullDays, setFullDays] = useState([]); // full days of a month
 	const { signer } = useWallet();
@@ -206,7 +234,6 @@ export const Calendar = memo(() => {
 		)
 		setContract(CalendarContract);
 		const allEvents = await CalendarContract.getMyEvents();
-		console.log(allEvents[0].eventText);
 		setEvents(allEvents);
 	}, [signer]);
 
@@ -218,7 +245,17 @@ export const Calendar = memo(() => {
 		setFullDays(getFullDays(currentDay));
 	}, [currentDay]);
 
-	const items = useMemo(() => [], []);
+
+	useEffect(() => {
+		if (contract) {
+			contract.on("EventAdded", getEvents);
+		}
+		return () => {
+			contract.off("EventAdded", getEvents);
+		}
+	});
+
+	const items = useMemo(() => currentDay ? events.filter(e => new Date(e.startTime.toNumber()).toDateString() === currentDay.toDateString()) : [], [currentDay, events]);
 
 	return <>
 		<MonthView
@@ -227,7 +264,7 @@ export const Calendar = memo(() => {
 			currentDay={currentDay}
 			setCurrentDay={setCurrentDay}
 		/>
-		<DayView items = {[]} currentDay={currentDay} contract={contract} />
+		<DayView items = {items} currentDay={currentDay} contract={contract} />
 	</>;
 });
 
@@ -242,4 +279,19 @@ function getFullDays(currentDay) {
 		fulldays.push(new Date(fullyear, month, i));
 	}
 	return fulldays;
+}
+
+function isConflict(items, newStartTime, newEndTime) {
+	for (let i=0; i<items.length; i++) {
+		const {startTime, endTime} = items[i];
+		if (
+			(startTime < newStartTime && newStartTime < endTime)
+			|| (startTime < newEndTime && newEndTime < endTime)
+			|| (newStartTime < startTime && startTime < newEndTime)
+			|| (newStartTime < endTime && endTime < newEndTime)
+		) {
+			return true;
+		}
+	}
+	return false;
 }

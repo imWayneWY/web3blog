@@ -97,7 +97,7 @@ export const Todo = memo(() => {
 			? <ul>
 				{tasks.map(task => <li key={task[0].toString()}>
 					<CheckBox onChange={e => {
-						task[3] && deleteTask(task[0]);
+						!task[3] && deleteTask(task[0]);
 					}} defaultChecked={task[3]} readOnly={task[3]} disabled={task[3]}/>
 					<Title $isDeleted={task[3]}>{task[2]}</Title>
 				</li>)}
