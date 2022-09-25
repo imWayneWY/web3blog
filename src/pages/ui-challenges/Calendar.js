@@ -1,6 +1,9 @@
-import { memo, useCallback, useEffect, useState } from "react";
+import { ethers } from "ethers";
+import { memo, useCallback, useEffect, useState, useMemo } from "react";
 import styled, { css } from "styled-components";
 import CalendarAbi from "../../abi/Calendar.json";
+import { useWallet } from "../../hooks/useWallet";
+import { CalendarContractAddress } from "../../utils/address";
 
 const MonthHeader = styled.div`
 	display: flex;
@@ -80,6 +83,10 @@ const DescInput = styled.input`
 `;
 const SubmintButton = styled.button``;
 
+const Msg = styled.p`
+	color: orange;
+`;
+
 const MONTHS = [
 	"JAN",
 	"FEB",
@@ -150,31 +157,68 @@ const MonthView = memo(({fulldays, month, currentDay, setCurrentDay}) => {
 	</>;
 });
 
-const DayView = memo(({items, currentDay}) => {
+const DayView = memo(({items, currentDay, contract}) => {
 	const [startTime, setStartTime] = useState(currentDay.getHours()+":"+currentDay.getMinutes());
 	const [endTime, setEndTime] = useState(currentDay.getHours()+":"+currentDay.getMinutes());
 	const [desc, setDesc] = useState("");
-	const createEvent = useCallback(() => {
-
-	}, [startTime, endTime, desc, items]);
+	const [msg, setMsg] = useState("");
+	const createEvent = useCallback((e) => {
+		e.preventDefault();
+		const trimedDescValue = desc.trim();
+		if (!trimedDescValue) {
+			setMsg("Please enter event desc");
+			return;
+		}
+		if (contract) {
+			const startTimeStamp = Number(new Date(currentDay.toDateString()+" "+startTime));
+			const endTimeStamp = Number(new Date(currentDay.toDateString()+" "+endTime));
+			if (isNaN(startTimeStamp) || isNaN(endTimeStamp) || endTimeStamp <= startTimeStamp) {
+				setMsg("Invalid Time");
+			}
+			contract.addEvent(trimedDescValue, startTimeStamp, endTimeStamp);
+			setDesc("");
+		}
+	}, [desc, contract, currentDay, startTime, endTime]);
 
 	return <>
 		<NewEventInputWrapper>
 			<StartTimePicker value={startTime} onChange={e => setStartTime(e.currentTarget.value)}/>
 			<EndTimePicker value={endTime} onChange={e => setEndTime(e.currentTarget.value)}/>
 			<DescInput value={desc} onChange={e => setDesc(e.currentTarget.value)} />
-			<SubmintButton>Create</SubmintButton>
+			<SubmintButton onClick={createEvent}>Create</SubmintButton>
 		</NewEventInputWrapper>
+		{msg && <Msg>{msg}</Msg>}
 	</>;
 });
 
 export const Calendar = memo(() => {
+	const [contract, setContract] = useState();
+	const [evnets, setEvents] = useState([]);
 	const [currentDay, setCurrentDay] = useState(new Date(Date.now()));
 	const [fullDays, setFullDays] = useState([]); // full days of a month
+	const { signer } = useWallet();
+
+	const getEvents = useCallback(async () => {
+		const CalendarContract = new ethers.Contract(
+			CalendarContractAddress,
+			CalendarAbi.abi,
+			signer
+		)
+		setContract(CalendarContract);
+		const allEvents = await CalendarContract.getMyEvents();
+		console.log(allEvents[0].eventText);
+		setEvents(allEvents);
+	}, [signer]);
+
+	useEffect(() => {
+		signer && getEvents();
+	}, [signer, getEvents]);
 
 	useEffect(() => {
 		setFullDays(getFullDays(currentDay));
 	}, [currentDay]);
+
+	const items = useMemo(() => [], []);
 
 	return <>
 		<MonthView
@@ -183,7 +227,7 @@ export const Calendar = memo(() => {
 			currentDay={currentDay}
 			setCurrentDay={setCurrentDay}
 		/>
-		<DayView items = {[]} currentDay={currentDay} />
+		<DayView items = {[]} currentDay={currentDay} contract={contract} />
 	</>;
 });
 
