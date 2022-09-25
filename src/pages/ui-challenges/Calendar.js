@@ -1,5 +1,6 @@
 import { memo, useCallback, useEffect, useState } from "react";
 import styled, { css } from "styled-components";
+import CalendarAbi from "../../abi/Calendar.json";
 
 const MonthHeader = styled.div`
 	display: flex;
@@ -59,6 +60,25 @@ const MonthSelector = styled.span`
 
 const PrevMonth = styled(MonthSelector)``;
 const NextMonth = styled(MonthSelector)``;
+
+const NewEventInputWrapper = styled.div`
+	display: flex;
+	justify-content: space-between;
+	gap: 10px;
+`;
+
+const StartTimePicker = styled.input.attrs({
+	type: "time"
+})``;
+
+const EndTimePicker = styled.input.attrs({
+	type: "time"
+})``;
+
+const DescInput = styled.input`
+	flex-grow: 1;
+`;
+const SubmintButton = styled.button``;
 
 const MONTHS = [
 	"JAN",
@@ -130,8 +150,22 @@ const MonthView = memo(({fulldays, month, currentDay, setCurrentDay}) => {
 	</>;
 });
 
-const DayView = memo(() => {
-	return <></>;
+const DayView = memo(({items, currentDay}) => {
+	const [startTime, setStartTime] = useState(currentDay.getHours()+":"+currentDay.getMinutes());
+	const [endTime, setEndTime] = useState(currentDay.getHours()+":"+currentDay.getMinutes());
+	const [desc, setDesc] = useState("");
+	const createEvent = useCallback(() => {
+
+	}, [startTime, endTime, desc, items]);
+
+	return <>
+		<NewEventInputWrapper>
+			<StartTimePicker value={startTime} onChange={e => setStartTime(e.currentTarget.value)}/>
+			<EndTimePicker value={endTime} onChange={e => setEndTime(e.currentTarget.value)}/>
+			<DescInput value={desc} onChange={e => setDesc(e.currentTarget.value)} />
+			<SubmintButton>Create</SubmintButton>
+		</NewEventInputWrapper>
+	</>;
 });
 
 export const Calendar = memo(() => {
@@ -149,7 +183,7 @@ export const Calendar = memo(() => {
 			currentDay={currentDay}
 			setCurrentDay={setCurrentDay}
 		/>
-		<DayView items = {[]} />
+		<DayView items = {[]} currentDay={currentDay} />
 	</>;
 });
 
