@@ -4,7 +4,8 @@ import { useWallet } from "../hooks/useWallet";
 import BlogAbi from "../abi/Web3BlogOwner.json";
 import { ethers } from "ethers";
 import { Markdown, Heading, Text } from "grommet";
-import { BlogAddress } from "../utils/address";
+import GuestAbi from "../abi/Web3BlogGuest.json";
+import { BlogAddress, GuestBlogAddress } from "../utils/address";
 
 
 export const Detail = memo(() => {
@@ -18,14 +19,23 @@ export const Detail = memo(() => {
 	const location = useLocation();
 
 	useEffect(() => {
-		if (!signer) return;
-		const BlogContract = new ethers.Contract(
-			BlogAddress,
-			BlogAbi.abi,
-			signer
-		)
-		setContract(BlogContract);
-	}, [signer]);
+		if (!signer || location.state.isOwner === undefined) return;
+		if (location.state.isOwner) {
+			const BlogContract = new ethers.Contract(
+				BlogAddress,
+				BlogAbi.abi,
+				signer
+			)
+			setContract(BlogContract);
+		} else {
+			const BlogContractGuest = new ethers.Contract(
+				GuestBlogAddress,
+				GuestAbi.abi,
+				signer
+			)
+			setContract(BlogContractGuest);
+		}
+	}, [signer, location.state.isOwner]);
 
 	useEffect(() => {
 		if (!contract) return;

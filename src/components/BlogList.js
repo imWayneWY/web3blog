@@ -8,11 +8,11 @@ const TenItemList = styled(List)`
 	width: 100%;
 `;
 
-export const BlogList = memo(({ items, currentPage, totalBlogsCount }) => {
+export const BlogList = memo(({ items, currentPage, totalBlogsCount, isOwner }) => {
 	const navigate = useNavigate();
 	const handleClick = useCallback(({ item, index }) => {
-		navigate("/detail", { state: { id: getBlogId(index, currentPage, totalBlogsCount), title: item } });
-	}, [currentPage, navigate, totalBlogsCount]);
+		navigate("/detail", { state: { id: getBlogId(index, currentPage, totalBlogsCount), title: item, isOwner } });
+	}, [currentPage, isOwner, navigate, totalBlogsCount]);
 
 	return <>{
 		items?.length

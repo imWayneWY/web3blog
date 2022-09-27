@@ -40,7 +40,7 @@ export const Main = memo(() => {
 		fetchTitles();
 	}, [contract, currentPage]);
 	return <Box pad="medium" align="center" justify="between" flex="grow" overflow="auto" height="100vh">
-		<BlogList items={items} currentPage={currentPage} totalBlogsCount={totalBlogsCount}/>
+		<BlogList items={items} currentPage={currentPage} totalBlogsCount={totalBlogsCount} isOwner />
 		<Pagination numberItems={totalBlogsCount} page={currentPage} onChange={({page}) => setCurrentPage(page)}/>
 	</Box>;
 })
