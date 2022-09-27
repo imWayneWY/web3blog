@@ -30,7 +30,6 @@ export const Main = memo(() => {
 				const result = await contract.fetchTitles(currentPage, true);
 				setItems([...result.filter(res => res !== "0x").map(res => ethers.utils.parseBytes32String(res))]);
 				const totalBlogsCountRes = await contract.getCount();
-				console.log(totalBlogsCountRes.toNumber());
 				setTotalBlogsCount(totalBlogsCountRes.toNumber());
 			} catch(error) {
 				console.error(`Fetch titles error on page ${currentPage}, descend: ${true}`);

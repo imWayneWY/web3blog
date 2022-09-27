@@ -192,9 +192,9 @@ const DayView = memo(({items, currentDay, contract}) => {
 		const setError = () => setMsg("Add event failed");
 		if (contract) {
 			contract.on("EventFailed", setError);
-		}
-		return () => {
-			contract.off("EventFailed", setError);
+			return () => {
+				contract.off("EventFailed", setError);
+			}	
 		}
 	})
 
@@ -249,9 +249,9 @@ export const Calendar = memo(() => {
 	useEffect(() => {
 		if (contract) {
 			contract.on("EventAdded", getEvents);
-		}
-		return () => {
-			contract.off("EventAdded", getEvents);
+			return () => {
+				contract.off("EventAdded", getEvents);
+			}	
 		}
 	});
 

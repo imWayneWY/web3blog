@@ -6,11 +6,13 @@ import { create as ipfsHttpClient } from 'ipfs-http-client';
 import { useWallet } from "../hooks/useWallet";
 import { Buffer } from 'buffer';
 import BlogAbi from "../abi/Web3BlogOwner.json";
-import { BlogAddress } from "../utils/address";
+import GuestAbi from "../abi/Web3BlogGuest.json";
+import { BlogAddress, GuestBlogAddress } from "../utils/address";
 import { ethers } from "ethers";
 
 const projectId = process.env.REACT_APP_PROJECT_ID;
 const projectSecret = process.env.REACT_APP_PROJECT_SECRET;
+const ownerAddress = process.env.REACT_APP_OWNER_SECRET;
 
 const auth =
     'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
@@ -38,13 +40,22 @@ export const Post = () => {
 
 	useEffect(() => {
 		if (!signer) return;
-		const BlogContract = new ethers.Contract(
-			BlogAddress,
-			BlogAbi.abi,
-			signer
-		)
-		setContract(BlogContract);
-	}, [signer]);
+		if (selectedAddress === ownerAddress) {
+			const BlogContractOwner = new ethers.Contract(
+				BlogAddress,
+				BlogAbi.abi,
+				signer
+			)
+			setContract(BlogContractOwner);
+		} else {
+			const BlogContractGuest = new ethers.Contract(
+				GuestBlogAddress,
+				GuestAbi.abi,
+				signer
+			)
+			setContract(BlogContractGuest);
+		}
+	}, [signer, selectedAddress]);
 
 	const handleUpdate = useCallback((e) => {
 		setTitle(e.target.value);
