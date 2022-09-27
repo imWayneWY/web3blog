@@ -28,7 +28,9 @@ export const Others = memo(() => {
 		async function fetchTitles() {
 			try {
 				const result = await contract.fetchTitles(currentPage, true);
-				setItems([...result.filter(res => res !== "0x").map(res => ethers.utils.parseBytes32String(res))]);
+				setItems([...result.filter(res => res !== "0x")
+					.map(res => res.length < 66 ? res.padEnd(66, '0') : res)
+					.map(res => ethers.utils.parseBytes32String(res))]);
 				const totalBlogsCountRes = await contract.getCount();
 				setTotalBlogsCount(totalBlogsCountRes.toNumber());
 			} catch(error) {
