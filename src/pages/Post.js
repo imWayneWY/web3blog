@@ -12,7 +12,7 @@ import { ethers } from "ethers";
 
 const projectId = process.env.REACT_APP_PROJECT_ID;
 const projectSecret = process.env.REACT_APP_PROJECT_SECRET;
-const ownerAddress = process.env.REACT_APP_OWNER_SECRET;
+const ownerAddress = process.env.REACT_APP_OWNER_ADDRESS;
 
 const auth =
     'Basic ' + Buffer.from(projectId + ':' + projectSecret).toString('base64');
