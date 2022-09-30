@@ -12,5 +12,8 @@ How does blockchain work? Imaging blockchain is continuous ledgers and is copied
 You may curious who decide the one to confirm the new block/ledger. Well, it's decided by different methods write in different blockchain system, and it's a big topic which we don't want to discuss here.
 ## How's WEB3 going right now?
 This is a big topic. WEB3 is much more mature than couple of years before, but still needs a long way to go. Tons of issues need to be solve before it widespread to all people. For example, WEB3 want to decentralized everything, but lots of big names in WEB3 industry is centralized now. Big techs in WEB3 world are using private servers, client side code are hosted on servers. We still are looking forward to some better infrastructure in WEB3. We still need to balance legality and freedom for WEB3.   
-Will the future be all WEB3 or only part of it? Nobody knows the answer, we'll see.
+Will the future be all WEB3 or only part of it? Nobody knows the answer, we'll see.  
 
+## How to enter WEB3
+For now, all you need is a crypto wallet. If you are looking this article, I'm sure you already are using MetaMask which is one of crypto wallets. Wallet contains some address, kind of like your deposit card. And for WEB3's content, you need show your card to interact with, like right now.  
+This article is stored on IPFS (a decentralized file system), as a digital asset. If you read here, my friend, you already are in WEB3 world. :)
