@@ -1,5 +1,9 @@
-import { memo, useCallback, useState } from "react";
+import { memo, useCallback, useState, useEffect } from "react";
 import styled from "styled-components";
+import { JiraContractAddress } from "../../utils/address";
+import { useWallet } from "../../hooks/useWallet";
+import { ethers } from "ethers";
+import JiraAbi from "../../abi/JIRA.json";
 
 // match with JIRA status
 const Status = {
@@ -79,23 +83,62 @@ const DescInput = styled.textarea`
 	font-size: 16px;
 `;
 
-const CreatePanel = memo(() => {
+const CreatePanel = memo(({onCreate}) => {
+	const [title, setTitle] = useState("");
+	const [desc, setDesc] = useState("");
+
+	const handleClick = useCallback(() => {
+		const trimedTitle = title.trim();
+		const trimedDesc = desc.trim();
+		if (!trimedTitle || !trimedDesc) return;
+		onCreate(trimedTitle, trimedDesc);
+	}, [title, desc, onCreate]);
+
 	return <CreatePanelWrapper>
 		<h3>Create a ticket</h3>
-		<TitleInput placeholder="input title here" />
-		<DescInput placeholder="input description here" />
-		<button>create</button>
+		<TitleInput placeholder="input title here" value={title} onChange={e => setTitle(e.currentTarget.value)}/>
+		<DescInput placeholder="input description here"  value={desc} onChange={e => setDesc(e.currentTarget.value)}/>
+		<button onClick={handleClick}>create</button>
 	</CreatePanelWrapper>
 });
 
 export const Jira = memo(() => {
 	const [isCreatePanelOpened, setIsCreatePanelOpened] = useState(false);
-	const createTicket = useCallback(({
+	const [contract, setContract] = useState();
+	const { signer }  = useWallet();
+	const [tasks, setTasks] = useState([]);
+
+	const getAllTasks = useCallback(async () => {
+		const JiraContract = new ethers.Contract(
+			JiraContractAddress,
+			JiraAbi.abi,
+			signer
+		)
+		setContract(JiraContract);
+		const allTasks = await JiraContract.getAllTasks();
+		console.log(allTasks);
+		setTasks(allTasks);
+	}, [signer])
+
+	const createTicket = useCallback((
 		title,
 		desc
-	}) => {
+	) => {
+		if (!contract) return;
+		contract.addTask(title, desc);
 		setIsCreatePanelOpened(false);
-	}, []);
+	}, [contract]);
+
+	useEffect(() => {
+		signer && getAllTasks();
+	}, [getAllTasks, signer])
+	
+	useEffect(() => {
+		if (contract) {
+			contract.on("AddTask", getAllTasks);
+			return () => contract.off("AddTask", getAllTasks);
+		}
+	}, [contract, getAllTasks]);
 	return <Wrapper>
 		<Header>
 			<h4>Todo</h4>
@@ -108,6 +151,6 @@ export const Jira = memo(() => {
 			<Column />
 		</Columns>
 		<CreateBtn onClick={() => setIsCreatePanelOpened(true)}>CREATE</CreateBtn>
-		{ isCreatePanelOpened && <CreatePanel />}
+		{ isCreatePanelOpened && <CreatePanel onCreate={createTicket} />}
 	</Wrapper>
 });
