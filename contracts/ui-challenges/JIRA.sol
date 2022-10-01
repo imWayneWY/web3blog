@@ -1,8 +1,9 @@
 // SPDX-License-Identifier: GPL-3.0
 
 pragma solidity  ^0.8.15;
+import "@openzeppelin/contracts/access/Ownable.sol";
 
-contract JIRA {
+contract JIRA is Ownable {
 
 	event AddTask(address recipient, uint taskId);
 	event AssignTask(address assignee, uint taskId);
@@ -41,5 +42,11 @@ contract JIRA {
 	}
 	function getAllTasks() external view returns (Task[] memory) {
 		return tasks;
+	}
+
+	// a owner only function for clean up bad task
+	function cleanTask(uint id) onlyOwner {
+		tasks[id].title = "Invalid Task";
+		tasks[id].desc = "Invalid Task";
 	}
 }
