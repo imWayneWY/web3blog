@@ -15,6 +15,10 @@ const DEMOS = [
 	{
 		title: "Calendar",
 		url: "/calendar"
+	},
+	{
+		title: "JIRA",
+		url: "/JIRA"
 	}
 ]
 
@@ -22,7 +26,7 @@ export const Demos = memo(() => {
 	const navigate = useNavigate();
 
 	const handleClick = useCallback(({item}) => {
-		navigate(item.url);
+		navigate("/ui-challenges" + item.url);
 	}, [navigate]);
 
 	return <>

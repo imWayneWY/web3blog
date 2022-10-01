@@ -45,7 +45,7 @@ contract JIRA is Ownable {
 	}
 
 	// a owner only function for clean up bad task
-	function cleanTask(uint id) onlyOwner {
+	function cleanTask(uint id) onlyOwner external {
 		tasks[id].title = "Invalid Task";
 		tasks[id].desc = "Invalid Task";
 	}
