@@ -69,6 +69,8 @@ const CreatePanelWrapper = styled.div`
 	box-shadow: 0 0 10px black;
 `;
 
+const TaskDetailPanel = styled(CreatePanelWrapper)``;
+
 const TitleInput = styled.input`
 	width: 100%;
 	height: 20px;
@@ -83,7 +85,46 @@ const DescInput = styled.textarea`
 	font-size: 16px;
 `;
 
-const CreatePanel = memo(({onCreate}) => {
+const CardWrapper = styled.div`
+	width: 100%;
+	height: 120px;
+	border-radius: 10px;
+	background: #fff;
+	padding: 10px;
+	box-sizing: border-box;
+	display: flex;
+	flex-direction: column;
+	justify-content: space-between;
+	cursor: grab;
+`;
+
+const CardTitle = styled.h4`
+	width: 100%;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	margin: 0;
+	user-select: none;
+`;
+
+const Assignee = styled.p`
+	font-size: 12px;
+	user-select: none;
+`;
+
+const CloseBtn = styled.div`
+	cursor: pointer;
+	position: absolute;
+	right: 20px;
+	top: 20px;
+	padding: 10px;
+`;
+
+const CardDesc = styled.p`
+	margin-top: 40px;
+`
+
+const CreatePanel = memo(({onCreate, onClose}) => {
 	const [title, setTitle] = useState("");
 	const [desc, setDesc] = useState("");
 
@@ -99,14 +140,33 @@ const CreatePanel = memo(({onCreate}) => {
 		<TitleInput placeholder="input title here" value={title} onChange={e => setTitle(e.currentTarget.value)}/>
 		<DescInput placeholder="input description here"  value={desc} onChange={e => setDesc(e.currentTarget.value)}/>
 		<button onClick={handleClick}>create</button>
+		<CloseBtn onClick={onClose}>X</CloseBtn>
 	</CreatePanelWrapper>
 });
 
+const TaskCard = memo(({task, handleClick}) => {
+	return <CardWrapper onClick={handleClick}>
+		<CardTitle>{task.title}</CardTitle>
+		<Assignee>assignee: 0x...{task.assignee.substring(task.assignee.length - 4)}</Assignee>
+	</CardWrapper>
+})
+
+const TaskDetail = memo(({task, onClose}) => {
+	return <TaskDetailPanel>
+		<CardTitle>{task.title}</CardTitle>
+		<Assignee>creator: 0x...{task.assignee.substring(task.creator.length - 4)}</Assignee>
+		<Assignee>assignee: 0x...{task.assignee.substring(task.assignee.length - 4)}</Assignee>
+		<Assignee>Status: {getStatus(task.status)}</Assignee>
+		<CardDesc>{task.desc}</CardDesc>
+		<CloseBtn onClick={onClose}>X</CloseBtn>
+	</TaskDetailPanel>
+});
 export const Jira = memo(() => {
 	const [isCreatePanelOpened, setIsCreatePanelOpened] = useState(false);
 	const [contract, setContract] = useState();
 	const { signer }  = useWallet();
 	const [tasks, setTasks] = useState([]);
+	const [viewTask, setViewTask] = useState(null);
 
 	const getAllTasks = useCallback(async () => {
 		const JiraContract = new ethers.Contract(
@@ -116,7 +176,6 @@ export const Jira = memo(() => {
 		)
 		setContract(JiraContract);
 		const allTasks = await JiraContract.getAllTasks();
-		console.log(allTasks);
 		setTasks(allTasks);
 	}, [signer])
 
@@ -146,11 +205,38 @@ export const Jira = memo(() => {
 			<h4>Finish</h4>
 		</Header>
 		<Columns>
-			<Column />
-			<Column />
-			<Column />
+			<Column>
+				{
+					tasks.filter(task => task.status === Status.TODO).map((task) => <TaskCard key={task.id} task={task} handleClick={() => setViewTask(task)}/>)
+				}
+			</Column>
+			<Column>
+				{
+					tasks.filter(task => task.status === Status.INPROGRESS).map((task) => <TaskCard key={task.id} task={task} handleClick={() => setViewTask(task)} />)
+				}
+			</Column>
+			<Column>
+				{
+					tasks.filter(task => task.status === Status.FINISH).map((task) => <TaskCard key={task.id} task={task} handleClick={() => setViewTask(task)} />)
+				}
+			</Column>
 		</Columns>
 		<CreateBtn onClick={() => setIsCreatePanelOpened(true)}>CREATE</CreateBtn>
-		{ isCreatePanelOpened && <CreatePanel onCreate={createTicket} />}
+		{ isCreatePanelOpened && <CreatePanel onCreate={createTicket} onClose={() => setIsCreatePanelOpened(false)} />}
+		{ !!viewTask && <TaskDetail task={viewTask} onClose={() => setViewTask(null)}/>}
 	</Wrapper>
 });
+
+
+function getStatus(status) {
+	switch (status) {
+		case Status.TODO:
+			return "Todo";
+		case Status.INPROGRESS:
+			return "In Progress";
+		case Status.FINISH:
+			return "Finish";
+		default:
+			return "Unknown";
+	}
+}

@@ -11,6 +11,7 @@ const TenItemList = styled(List)`
 export const BlogList = memo(({ items, currentPage, totalBlogsCount, isOwner }) => {
 	const navigate = useNavigate();
 	const handleClick = useCallback(({ item, index }) => {
+		if (item === "Deleted Article") return;
 		navigate("/detail", { state: { id: getBlogId(index, currentPage, totalBlogsCount), title: item, isOwner } });
 	}, [currentPage, isOwner, navigate, totalBlogsCount]);
 
