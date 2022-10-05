@@ -85,7 +85,9 @@ const DescInput = styled.textarea`
 	font-size: 16px;
 `;
 
-const CardWrapper = styled.div`
+const CardWrapper = styled.div.attrs({
+	draggable: "true"
+})`
 	width: 100%;
 	height: 120px;
 	border-radius: 10px;
@@ -95,7 +97,7 @@ const CardWrapper = styled.div`
 	display: flex;
 	flex-direction: column;
 	justify-content: space-between;
-	cursor: grab;
+	cursor: move;
 `;
 
 const CardTitle = styled.h4`
@@ -145,7 +147,10 @@ const CreatePanel = memo(({onCreate, onClose}) => {
 });
 
 const TaskCard = memo(({task, handleClick}) => {
-	return <CardWrapper onClick={handleClick}>
+	// todo: implement assign function with contract.assign(uint id, address assignee)
+	return <CardWrapper onClick={handleClick} onDragStart={(ev) => {
+		ev.dataTransfer.setData("text/plain", task.id);
+	}}>
 		<CardTitle>{task.title}</CardTitle>
 		<Assignee>assignee: 0x...{task.assignee.substring(task.assignee.length - 4)}</Assignee>
 	</CardWrapper>
@@ -176,7 +181,7 @@ export const Jira = memo(() => {
 		)
 		setContract(JiraContract);
 		const allTasks = await JiraContract.getAllTasks();
-		setTasks(allTasks);
+		setTasks(allTasks.map((task) => ({...task, isDragging: false})));
 	}, [signer])
 
 	const createTicket = useCallback((
@@ -198,6 +203,20 @@ export const Jira = memo(() => {
 			return () => contract.off("AddTask", getAllTasks);
 		}
 	}, [contract, getAllTasks]);
+
+	const allowDragOver = useCallback((e) => e.preventDefault(), []);
+	const setStatus = useCallback((ev, status) => {
+		ev.preventDefault();
+		const id = ev.dataTransfer.getData("text/plain");
+		const targetTask = tasks.filter((task) => task.id.eq(id))[0];
+		if (status === targetTask.status) return;
+		if (contract) {
+			contract.setStatus(targetTask.id, status);
+			targetTask.status = status;
+			setTasks(tasks => tasks.map(task => task.id.eq(targetTask.id) ? targetTask : task));
+		}
+	}, [tasks, contract]);
+
 	return <Wrapper>
 		<Header>
 			<h4>Todo</h4>
@@ -205,19 +224,19 @@ export const Jira = memo(() => {
 			<h4>Finish</h4>
 		</Header>
 		<Columns>
-			<Column>
+			<Column onDragOver={allowDragOver} onDrop={(e) => setStatus(e, Status.TODO)}>
 				{
-					tasks.filter(task => task.status === Status.TODO).map((task) => <TaskCard key={task.id} task={task} handleClick={() => setViewTask(task)}/>)
+					tasks.filter(task => task.status === Status.TODO && !task.isDragging).map((task) => <TaskCard key={task.id} task={task} handleClick={() => setViewTask(task)} />)
 				}
 			</Column>
-			<Column>
+			<Column onDragOver={allowDragOver} onDrop={(e) => setStatus(e, Status.INPROGRESS)}>
 				{
-					tasks.filter(task => task.status === Status.INPROGRESS).map((task) => <TaskCard key={task.id} task={task} handleClick={() => setViewTask(task)} />)
+					tasks.filter(task => task.status === Status.INPROGRESS && !task.isDragging).map((task) => <TaskCard key={task.id} task={task} handleClick={() => setViewTask(task)} />)
 				}
 			</Column>
-			<Column>
+			<Column onDragOver={allowDragOver} onDrop={(e) => setStatus(e, Status.FINISH)}>
 				{
-					tasks.filter(task => task.status === Status.FINISH).map((task) => <TaskCard key={task.id} task={task} handleClick={() => setViewTask(task)} />)
+					tasks.filter(task => task.status === Status.FINISH && !task.isDragging).map((task) => <TaskCard key={task.id} task={task} handleClick={() => setViewTask(task)} />)
 				}
 			</Column>
 		</Columns>
