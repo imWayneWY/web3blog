@@ -6,6 +6,7 @@ import { Router } from "./Router";
 import { useWallet } from "./hooks/useWallet";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import styled from "styled-components";
 
 const theme = {
   global: {
@@ -31,6 +32,10 @@ const SidebarButton = ({ icon, label, ...rest }) => (
 );
 
 
+const Content = styled(Box)`
+  flex: 1;
+`;
+
 function App() {
   const {selectedAddress} = useWallet();
   const navigate = useNavigate();
@@ -49,7 +54,7 @@ function App() {
               </Box>
             }
             footer={
-              <SidebarButton icon={<User />} label="About Me" />
+              <SidebarButton icon={<User />} label="About Me" onClick={() => handleNavigate("/about")}/>
             }
           >
             <Nav gap="small">
@@ -59,11 +64,11 @@ function App() {
               <SidebarButton icon={<Projects />} label="A Little Practice" onClick={() => handleNavigate("/demos")} />
             </Nav>
           </Sidebar>
-          <Box flex="grow" pad="medium" overflow="auto" height="100vh">
+          <Content pad="medium" overflow="auto" height="100vh">
             {
               selectedAddress ? <Router /> : <Welcome />
             }
-          </Box>
+          </Content>
         </Box>
       </Grommet>
   );
