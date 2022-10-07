@@ -1,5 +1,5 @@
 import { Grommet, Sidebar, Avatar, Button, Nav, Box, Heading } from "grommet";
-import { User, Article, Projects, Blog, Edit} from "grommet-icons";
+import { User, Article, Cubes, Blog, Edit, Brush} from "grommet-icons";
 import AvatarImg from "./assets/Avatar.jpeg";
 import { Welcome } from "./pages/Welcome";
 import { Router } from "./Router";
@@ -61,7 +61,8 @@ function App() {
               <SidebarButton icon={<Blog />} label="In My Point Of View" onClick={() => handleNavigate("/")} />
               <SidebarButton icon={<Article />} label="Others Said"  onClick={() => handleNavigate("/others")} />
               <SidebarButton icon={<Edit />} label="Post My Thought" onClick={() => handleNavigate("/post")} />
-              <SidebarButton icon={<Projects />} label="A Little Practice" onClick={() => handleNavigate("/demos")} />
+              <SidebarButton icon={<Cubes />} label="A Little Practice" onClick={() => handleNavigate("/demos")} />
+              <SidebarButton icon={<Brush />} label="System Design" onClick={() => handleNavigate("/system-design")} />
             </Nav>
           </Sidebar>
           <Content pad="medium" overflow="auto" height="100vh">
