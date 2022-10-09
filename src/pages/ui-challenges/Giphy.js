@@ -1,6 +1,8 @@
 import { memo, useCallback, useEffect, useState, useLayoutEffect } from "react";
 import styled from "styled-components";
 import { Spinner } from "grommet";
+import { Refresh } from "grommet-icons";
+import { useNavigate } from "react-router-dom";
 
 const Wrapper = styled.div`
 	width: 100%;
@@ -36,8 +38,24 @@ const LoadingWrapper = styled.div`
 	align-items: center;
 `;
 
+const RefreshBtn = styled.div`
+	position: fixed;
+	right: 20px;
+	bottom: 20px;
+	width: 60px;
+	height: 60px;
+	border-radius: 30px;
+	z-index: 100;
+	box-shadow: 0 0 10px black;
+	background: grey;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+`;
+
 const URL = "https://picsum.photos/v2/list";
-const amount = 10;
+const amount = 20;
 
 export const Giphy = memo(() => {
 	const [images, setImages] = useState([]);
@@ -47,21 +65,23 @@ export const Giphy = memo(() => {
 	const [wrapperRef, setWrapperRef] = useState();
 	const [columnWidth, setColumnWidth] = useState(0);
 
+	const navigate = useNavigate();
+
 	useLayoutEffect(() => {
 		if (!wrapperRef) return;
 		setColumnWidth(wrapperRef.clientWidth / 3 - 20);
 	}, [wrapperRef])
 
-	const fetchImages = useCallback((page) => {
-		fetch(`${URL}?page=${page}&limit=${amount}`)
+	const fetchImages = useCallback(() => {
+		const randomPage = Math.round(Math.random() * 100)
+		fetch(`${URL}?page=${randomPage}&limit=${amount}`)
 		.then(res => res.json())
-		.then(data => setImages(images => [...images, ...data]))
+		.then(data => setImages(images => [...data]))
 		.catch(err => console.error(err));
 	}, [])
 
 	useEffect(() => {
-		const randomPage = Math.round(Math.random() * 100)
-		fetchImages(randomPage);
+		fetchImages();
 	}, [fetchImages]);
 
 	useEffect(() => {
@@ -118,6 +138,9 @@ export const Giphy = memo(() => {
 				col2Images.map((img, idx) => <LoadImg key={idx} src={img.download_url} top={img.top} height={img.height} />)
 			}
 		</Column>
+		<RefreshBtn onClick={() => navigate(0)}>
+			<Refresh color="white" />
+		</RefreshBtn>
 	</Wrapper>
 });
 
