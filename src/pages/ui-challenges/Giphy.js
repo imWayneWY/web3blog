@@ -1,5 +1,6 @@
 import { memo, useCallback, useEffect, useState, useLayoutEffect } from "react";
 import styled from "styled-components";
+import { Spinner } from "grommet";
 
 const Wrapper = styled.div`
 	width: 100%;
@@ -12,20 +13,37 @@ const Column = styled.div`
 	position: relative;
 `;
 
-const Image = styled.img`
+const ImageWrapper = styled.div`
 	position: absolute;
+	top: ${props => props.top}px;
 	left: 10px;
 	width: calc(100% - 20px);
-	top: ${props => props.top}px;
+	height: ${props => props.height}px;
 `;
+const Image = styled.img`
+	display: ${props => props.loaded ? "block" : "none"};
+	width: 100%;
+	border-radius: 20px;
+`;
+
+const LoadingWrapper = styled.div`
+	width: 100%;
+	height: 100%;
+	border-radius: 20px;
+	background: #ccc;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+`;
+
 const URL = "https://picsum.photos/v2/list";
-const amount = 50;
+const amount = 10;
 
 export const Giphy = memo(() => {
 	const [images, setImages] = useState([]);
+	const [col0Images, setCol0Images] = useState([]);
 	const [col1Images, setCol1Images] = useState([]);
 	const [col2Images, setCol2Images] = useState([]);
-	const [col3Images, setCol3Images] = useState([]);
 	const [wrapperRef, setWrapperRef] = useState();
 	const [columnWidth, setColumnWidth] = useState(0);
 
@@ -42,29 +60,77 @@ export const Giphy = memo(() => {
 	}, [])
 
 	useEffect(() => {
-		fetchImages(1);
+		const randomPage = Math.round(Math.random() * 100)
+		fetchImages(randomPage);
 	}, [fetchImages]);
 
 	useEffect(() => {
-		console.warn(columnWidth)
 		if (!images.length || !columnWidth) return;
-		console.log(images[0]);
-		console.log(columnWidth);
-		
-		const img1height = columnWidth / (images[0].width / images[0].height);
-		console.warn(img1height);
-		const top2 = img1height + 10;
-		setCol1Images([{...images[0], top: 0}, {...images[1], top: top2}]);
+		const layoutImages = () => {
+			const heights = [10,10,10];
+			const columnImgs = [[], [], []];
 
+			const getShortestHeight = () => {
+				let min = Infinity;
+				let minIdx = -1;
+				for (let i=0; i<3; i++) {
+					if (heights[i] < min) {
+						min = heights[i];
+						minIdx = i;
+					}
+				}
+				return [minIdx, min];
+			}
+
+			for (let i=0; i<images.length; i++) {
+				const image = images[i];
+				const [shortestHeightIdx, shortestHeight] = getShortestHeight();
+				const imgHeight = columnWidth / (images[i].width / images[i].height);
+				const newImg = {
+					...image,
+					top: shortestHeight+10,
+					height: imgHeight
+				}
+				heights[shortestHeightIdx] = shortestHeight + 10 + imgHeight;
+
+				columnImgs[shortestHeightIdx].push(newImg);
+			}
+			setCol0Images(columnImgs[0]);
+			setCol1Images(columnImgs[1]);
+			setCol2Images(columnImgs[2]);
+		}
+		layoutImages()
 	}, [columnWidth, images]);
 
 	return <Wrapper ref={setWrapperRef}>
 		<Column id="col0">
 			{
-				col1Images.map(img => <Image src ={img.download_url} top={img.top}/>)
+				col0Images.map((img, idx) => <LoadImg key={idx} src={img.download_url} top={img.top} height={img.height} />)
 			}
 		</Column>
-		<Column id="col1" />
-		<Column id="col2" />
+		<Column id="col1">
+			{
+				col1Images.map((img, idx) => <LoadImg key={idx} src={img.download_url} top={img.top} height={img.height} />)
+			}
+		</Column>
+		<Column id="col2" >
+			{
+				col2Images.map((img, idx) => <LoadImg key={idx} src={img.download_url} top={img.top} height={img.height} />)
+			}
+		</Column>
 	</Wrapper>
 });
+
+const LoadImg = memo(({src, top, height}) => {
+	const [loaded, setLoaded] = useState(false);
+	return <ImageWrapper  top={top}  height={height}>
+		{!loaded && <Loading/>}
+		<Image src={src} onLoad={() => setLoaded(true)} loaded={loaded} />
+	</ImageWrapper>
+})
+
+const Loading = () => (
+	<LoadingWrapper>
+		<Spinner />
+	</LoadingWrapper>
+);
