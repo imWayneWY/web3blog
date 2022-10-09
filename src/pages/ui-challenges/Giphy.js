@@ -73,7 +73,7 @@ export const Giphy = memo(() => {
 	}, [wrapperRef])
 
 	const fetchImages = useCallback(() => {
-		const randomPage = Math.round(Math.random() * 100)
+		const randomPage = Math.round(Math.random() * 50)
 		fetch(`${URL}?page=${randomPage}&limit=${amount}`)
 		.then(res => res.json())
 		.then(data => setImages(images => [...data]))
