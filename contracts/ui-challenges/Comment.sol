@@ -17,28 +17,48 @@ contract CommentContract {
         string content;
         uint postTime;
         address referAuthor;
-        bytes32 referBriefContent;
+        string referContent;
         uint referPostTime;
-        uint likes;
+        address[] likes;
     }
 
+    event AddComment(address author, uint id);
 	Comment[] private comments;
-    uint[] private likes;
+    mapping(uint => address[]) private likes;
 
     constructor() {
         // This is meaningless comment, just for comment without refer to point
-        comments.push(Comment(0, msg.sender, "HelloWorld", block.timestamp, 0));
-        likes.push(0);
+        comments.push(Comment(0, msg.sender, "", block.timestamp, 0));
     }
 
     function postComment(string memory content, uint referId) external {
         require(referId < comments.length, "Invalid referId");
         uint commentId = comments.length;
         comments.push(Comment(commentId, msg.sender, content, block.timestamp, referId));
-        likes.push(0);
+        emit AddComment(msg.sender, commentId);
     }
     function likeComment(uint commentId) external {
         require(commentId < comments.length, "Invalid commentId");
-        likes[commentId]++;
+        address[] memory existedLikesUser = likes[commentId];
+        for (uint i=0; i<existedLikesUser.length; i++) {
+            require(existedLikesUser[i] != msg.sender, "You already liked");
+        }
+        likes[commentId].push(msg.sender);
+    }
+    function listComments() external view returns (OutputComment[] memory) {
+        OutputComment[] memory commentList = new OutputComment[](comments.length);
+        for (uint i=comments.length-1; i > 0; i++) {
+            commentList[i] = OutputComment(
+                comments[i].id,
+                comments[i].author,
+                comments[i].content,
+                comments[i].postTime,
+                comments[comments[i].referId].author,
+                comments[comments[i].referId].content,
+                comments[comments[i].referId].postTime,
+                likes[i]
+            );
+        }
+        return commentList;
     }
 }
