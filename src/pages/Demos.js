@@ -23,6 +23,10 @@ const DEMOS = [
 	{
 		title: "GIPHY",
 		url: "/GIPHY"
+	},
+	{
+		title: "Comment",
+		url: "/Comment"
 	}
 ]
 

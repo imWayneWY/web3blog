@@ -12,6 +12,7 @@ import { Jira } from "./pages/ui-challenges/Jira";
 import { About } from "./pages/About";
 import { SystemDesignDetail } from "./pages/SD-detail";
 import { Giphy } from "./pages/ui-challenges/Giphy";
+import { Comment } from "./pages/ui-challenges/Comment";
 
 export const Router = memo(() => {
 	return <Routes>
@@ -27,5 +28,6 @@ export const Router = memo(() => {
 		<Route path="/ui-challenges/calendar" element={<Calendar />} />
 		<Route path="/ui-challenges/JIRA" element={<Jira />} />
 		<Route path="/ui-challenges/Giphy" element={<Giphy />} />
+		<Route path="/ui-challenges/Comment" element={<Comment />} />
 	</Routes>
 });
