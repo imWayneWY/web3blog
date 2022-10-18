@@ -1,5 +1,9 @@
-import { memo } from "react";
+import { ethers } from "ethers";
+import { memo, useCallback, useEffect, useState } from "react";
 import styled from "styled-components";
+import { useWallet } from "../../hooks/useWallet";
+import { CommentContractAddress } from "../../utils/address";
+import CommentAbi from "../../abi/Comment.json";
 
 const InputWrapper = styled.div`
 	width: 100%;
@@ -28,6 +32,23 @@ const CommentInput = memo(() => {
 })
 
 export const Comment = memo(() => {
+	const [contract, setContract]  = useState();
+	const { signer } = useWallet();
+
+	const initContract = useCallback(() => {
+		if (!signer) return;
+		const CommentContract = new ethers.Contract(
+			CommentContractAddress,
+			CommentAbi.abi,
+			signer
+		)
+		setContract(CommentContract);
+	}, [signer]);
+
+	useEffect(() => {
+		signer && initContract()
+	}, [signer, initContract]);
+
 	return <>
 		<CommentInput />
 	</>;
