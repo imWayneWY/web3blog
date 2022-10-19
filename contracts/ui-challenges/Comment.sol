@@ -16,6 +16,7 @@ contract CommentContract {
         address author;
         string content;
         uint postTime;
+        uint referId;
         address referAuthor;
         string referContent;
         uint referPostTime;
@@ -46,18 +47,21 @@ contract CommentContract {
         likes[commentId].push(msg.sender);
     }
     function listComments() external view returns (OutputComment[] memory) {
-        OutputComment[] memory commentList = new OutputComment[](comments.length);
-        for (uint i=comments.length-1; i > 0; i++) {
-            commentList[i] = OutputComment(
+        OutputComment[] memory commentList = new OutputComment[](comments.length-1);
+        uint idx = 0;
+        for (uint i=comments.length-1; i > 0; i--) {
+            commentList[idx] = OutputComment(
                 comments[i].id,
                 comments[i].author,
                 comments[i].content,
                 comments[i].postTime,
+                comments[i].referId,
                 comments[comments[i].referId].author,
                 comments[comments[i].referId].content,
                 comments[comments[i].referId].postTime,
                 likes[i]
             );
+            idx++;
         }
         return commentList;
     }
