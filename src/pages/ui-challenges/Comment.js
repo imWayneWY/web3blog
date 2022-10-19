@@ -24,15 +24,22 @@ const SubmitBtn = styled.button`
 	height: 100px;
 `;
 
-const CommentInput = memo(() => {
+const CommentInput = memo(({onSubmit, referId}) => {
+	const [value, setValue] = useState("");
+	const handleSubmit = useCallback(() => {
+		onSubmit(value);
+		setValue("");
+	}, [onSubmit, value])
 	return <InputWrapper>
-		<InputArea />
-		<SubmitBtn>Submit</SubmitBtn>
+		<InputArea value={value} onChange={(e) => setValue(e.currentTarget.value)} />
+		<SubmitBtn onClick={handleSubmit}>Submit</SubmitBtn>
 	</InputWrapper>
 })
 
 export const Comment = memo(() => {
 	const [contract, setContract]  = useState();
+	const [comments, setComments] = useState([]);
+	const [referId, setReferId] = useState(0);
 	const { signer } = useWallet();
 
 	const initContract = useCallback(() => {
@@ -49,7 +56,23 @@ export const Comment = memo(() => {
 		signer && initContract()
 	}, [signer, initContract]);
 
+	const getComments = useCallback(async () => {
+		if (contract) {
+			const list = await contract.listComments();
+			setComments(list);
+		}	
+	}, [contract]);
+
+	useEffect(() => {
+		contract && getComments();
+	}, [contract, getComments]);
+
+	const submitComment = useCallback((content) => {
+		if (!contract) return;
+		contract.postComment(content, referId);
+	}, [contract, referId])
+
 	return <>
-		<CommentInput />
+		<CommentInput onSubmit = {submitComment} referId={referId} />
 	</>;
 });
