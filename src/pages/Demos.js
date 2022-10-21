@@ -27,6 +27,10 @@ const DEMOS = [
 	{
 		title: "Comment",
 		url: "/Comment"
+	},
+	{
+		title: "Tic-Tac-Toe",
+		url: "/TicTacToe"
 	}
 ]
 

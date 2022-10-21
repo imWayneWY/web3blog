@@ -33,6 +33,7 @@ const SidebarButton = ({ icon, label, ...rest }) => (
 
 
 const Content = styled(Box)`
+  position: relative;
   flex: 1;
 `;
 
