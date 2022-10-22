@@ -31,6 +31,10 @@ const DEMOS = [
 	{
 		title: "Tic-Tac-Toe",
 		url: "/TicTacToe"
+	},
+	{
+		title: "Infinite Scroll",
+		url: "/InfiniteScroll"
 	}
 ]
 
