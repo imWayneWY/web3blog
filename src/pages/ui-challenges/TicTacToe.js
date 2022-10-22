@@ -1,5 +1,5 @@
 import { memo, useCallback, useState } from "react";
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 const TicTacToeWrapper = styled.div`
 	width: 100%;
@@ -29,6 +29,9 @@ const Spot = styled.div`
 	text-align: center;
 	border-radius: 20px;
 	background: white;
+	${props => props.hasPiece && css`
+		pointer-events: none;
+	`}
 `;
 
 const Banner = styled.div`
@@ -96,7 +99,7 @@ const TicTacToeBoard = memo(({state, placePiece, difficulty, switchDifficulty}) 
 		<Board>
 			{
 				state.flat().map((s, idx) => {
-					return <Spot key={idx} onClick={() => handleClick(idx)}>{s}</Spot>;
+					return <Spot key={idx} onClick={() => handleClick(idx)} hasPiece={!!s}>{s}</Spot>;
 				})
 			}
 		</Board>
