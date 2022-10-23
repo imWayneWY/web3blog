@@ -1,4 +1,4 @@
-import { memo, useCallback, useEffect, useState, useMemo } from "react";
+import { memo, useCallback, useEffect, useState, useMemo, useRef } from "react";
 import styled from "styled-components";
 /**
  * Data emulator
@@ -35,6 +35,10 @@ function db(
 /**
  * component
  */
+
+const ScrollWrapper = styled.div`
+	width: 100%;
+`;
 const CardWrapper = styled.div`
 	width: 600px;
 	display: flex;
@@ -65,22 +69,38 @@ const Card = memo(({imgUrl, title, desc}) => {
 	</CardWrapper>
 });
 
+const BottomObserver = styled.div`
+	width: 70%;
+	height: 48px;
+	border: 1px solid blue;
+	margin: 0 auto;
+	background: rgba(0,0,255,0.25);
+`;
+
 export const InfiniteScroll = memo(() => {
 	const [items, setItems] = useState([]);
-	const itemDB = useMemo(() => db(getItem), []);
-	const [nextCursor, setNextCursor] = useState(-1);
-	const [prevCursor, setPrevCursor] = useState(-1);
-	const loadItems = useCallback(async (start, limit) => {
-		const {nextCursor, prevCursor, chunk } = await itemDB.load(start, limit);
-		setNextCursor(nextCursor);
-		setPrevCursor(prevCursor);
+	const [cursor, setCursor] = useState(0);
+	const ref = useRef();
+
+	const loadItems = useCallback(async () => {
+		const { chunk } = await db(getItem).load(cursor, 10);
 		setItems(items => [...items, ...chunk]);
-	}, [itemDB]);
+		setCursor(c => c + 10);
+	}, [cursor]);
+
 	useEffect(() => {
-		// initial load
-		loadItems(0, 100);
+		const callback = ([entry]) => {
+			if (entry.intersectionRatio > 0.1) {
+				loadItems();
+			}
+		};
+		const observer = new IntersectionObserver(callback, { threshold: 0.25 });
+		observer.observe(ref.current);
+		return () => observer.disconnect();
 	}, [loadItems]);
-	return <>{
-		!!items?.length && items.map((item, idx) => <Card {...item} key={idx}/>)
-	}</>;
+
+	return <ScrollWrapper>
+		{!!items?.length && items.map((item, idx) => <Card {...item} key={idx}/>)}
+		<BottomObserver ref={ref} />
+	</ScrollWrapper>;
 })
