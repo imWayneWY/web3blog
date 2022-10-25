@@ -94,7 +94,9 @@ const ScrollDirection = {
 }
 
 export const InfiniteScroll = memo(() => {
-	const [items, setItems] = useState([]);
+	const [items1, setItems1] = useState([]);
+	const [items2, setItems2] = useState([]);
+	const [isSetItems1, setIsSetItems1] = useState(true);
 	const [start, setStart] = useState(0);
 	const [end, setEnd] = useState(0);
 	const topRef = useRef();
@@ -103,17 +105,26 @@ export const InfiniteScroll = memo(() => {
 
 	const handleTopIntersection = useCallback(async () => {}, []);
 	const handleBottomIntersection = useCallback(async () => {
-		if (end !== 0) return;
 		const { chunk } = await db(getItem).load(end, 10);
-		setItems(chunk.map((item, idx) => {
-			return {
-				...item,
-				order: end+idx,
-			}
-		}));
+		if (isSetItems1) {
+			setItems1(chunk.map((item, idx) => {
+				return {
+					...item,
+					order: end+idx,
+				}
+			}));	
+		} else {
+			setItems2(chunk.map((item, idx) => {
+				return {
+					...item,
+					order: end+idx,
+				}
+			}));	
+		}
 		setBottomMarginTop(getTranslateY(end + 9));
 		setEnd(end => end + 10);
-	}, [end]);
+		setIsSetItems1(b => !b)
+	}, [end, isSetItems1]);
 
 	const update = useCallback(async(trigger) => {
 		switch(trigger) {
@@ -151,7 +162,8 @@ export const InfiniteScroll = memo(() => {
 
 	return <ScrollWrapper>
 		<TopObserver ref={topRef} />
-		{!!items?.length && items.map((item, idx) => <Card {...item} key={idx} translateY={getTranslateY(item.order)} />)}
+		{!!items1?.length && items1.map((item, idx) => <Card {...item} key={idx} translateY={getTranslateY(item.order)} />)}
+		{!!items2?.length && items2.map((item, idx) => <Card {...item} key={idx} translateY={getTranslateY(item.order)} />)}
 		<BottomObserver ref={bottomRef} $marginTop={bottomMarginTop}/>
 	</ScrollWrapper>;
 })
