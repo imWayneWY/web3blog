@@ -41,11 +41,17 @@ const ScrollWrapper = styled.div`
 `;
 const CardWrapper = styled.div`
 	width: 600px;
+	height: 240px;
 	display: flex;
 	align-items: center;
-	margin: 2rem auto;
+	margin: 20px auto;
 	box-shadow: 0 0 7px 2px rgba(0,0,0,.1);
 	border-radius: 6px;
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	transform: translateY(${props => props.$translateY}px);
 `;
 
 const CardDesc = styled.div`
@@ -59,8 +65,8 @@ const CardImg = styled.img`
 	box-shadow: 0 0 0px 1px rgba(0,0,0,.1);
 	padding: 1rem;	
 `;
-const Card = memo(({imgUrl, title, desc}) => {
-	return <CardWrapper>
+const Card = memo(({imgUrl, title, desc, translateY}) => {
+	return <CardWrapper $translateY = {translateY}>
 		<CardImg src={imgUrl} alt={title} />
 		<CardDesc>
 			<h2>{title}</h2>
@@ -69,7 +75,7 @@ const Card = memo(({imgUrl, title, desc}) => {
 	</CardWrapper>
 });
 
-const BottomObserver = styled.div`
+const Observer = styled.div`
 	width: 70%;
 	height: 48px;
 	border: 1px solid blue;
@@ -77,30 +83,79 @@ const BottomObserver = styled.div`
 	background: rgba(0,0,255,0.25);
 `;
 
+const TopObserver = styled(Observer)``;
+const BottomObserver = styled(Observer)`
+	margin-top: ${props => props.$marginTop}px;
+`;
+
+const ScrollDirection = {
+	UP: "up",
+	DOWN: "down"
+}
+
 export const InfiniteScroll = memo(() => {
 	const [items, setItems] = useState([]);
-	const [cursor, setCursor] = useState(0);
-	const ref = useRef();
+	const [start, setStart] = useState(0);
+	const [end, setEnd] = useState(0);
+	const topRef = useRef();
+	const bottomRef = useRef();
+	const [bottomMarginTop, setBottomMarginTop] = useState(20);
 
-	const loadItems = useCallback(async () => {
-		const { chunk } = await db(getItem).load(cursor, 10);
-		setItems(items => [...items, ...chunk]);
-		setCursor(c => c + 10);
-	}, [cursor]);
+	const handleTopIntersection = useCallback(async () => {}, []);
+	const handleBottomIntersection = useCallback(async () => {
+		if (end !== 0) return;
+		const { chunk } = await db(getItem).load(end, 10);
+		setItems(chunk.map((item, idx) => {
+			return {
+				...item,
+				order: end+idx,
+			}
+		}));
+		setBottomMarginTop(getTranslateY(end + 9));
+		setEnd(end => end + 10);
+	}, [end]);
+
+	const update = useCallback(async(trigger) => {
+		switch(trigger) {
+			case ScrollDirection.UP:
+				await handleTopIntersection();
+				break;
+			case ScrollDirection.DOWN:
+				await handleBottomIntersection();
+				break;
+			default:
+				break;
+		}
+	}, [handleTopIntersection, handleBottomIntersection]);
 
 	useEffect(() => {
-		const callback = ([entry]) => {
+		const topCb = async ([entry]) => {
 			if (entry.intersectionRatio > 0.1) {
-				loadItems();
+				update(ScrollDirection.UP);
 			}
 		};
-		const observer = new IntersectionObserver(callback, { threshold: 0.25 });
-		observer.observe(ref.current);
-		return () => observer.disconnect();
-	}, [loadItems]);
+		const bottomCb = async ([entry]) => {
+			if (entry.intersectionRatio > 0.1) {
+				update(ScrollDirection.DOWN);
+			}
+		};
+		const topObserver = new IntersectionObserver(topCb, { threshold: 0.25 });
+		const bottomObserver = new IntersectionObserver(bottomCb, { threshold: 0.25 });
+		topObserver.observe(topRef.current);
+		bottomObserver.observe(bottomRef.current);
+		return () => {
+			topObserver.disconnect();
+			bottomObserver.disconnect();
+		}
+	}, [update]);
 
 	return <ScrollWrapper>
-		{!!items?.length && items.map((item, idx) => <Card {...item} key={idx}/>)}
-		<BottomObserver ref={ref} />
+		<TopObserver ref={topRef} />
+		{!!items?.length && items.map((item, idx) => <Card {...item} key={idx} translateY={getTranslateY(item.order)} />)}
+		<BottomObserver ref={bottomRef} $marginTop={bottomMarginTop}/>
 	</ScrollWrapper>;
 })
+
+function getTranslateY(order) {
+	return 260 * order;
+}
