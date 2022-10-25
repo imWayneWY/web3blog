@@ -81,12 +81,15 @@ const Observer = styled.div`
 	border: 1px solid blue;
 	margin: 0 auto;
 	background: rgba(0,0,255,0.25);
+	position: absolute;
+	left: 0;
+	right: 0;
+	top: 0;
+	transform: translateY(${props => props.$marginTop}px);
 `;
 
 const TopObserver = styled(Observer)``;
-const BottomObserver = styled(Observer)`
-	margin-top: ${props => props.$marginTop}px;
-`;
+const BottomObserver = styled(Observer)``;
 
 const ScrollDirection = {
 	UP: "up",
@@ -96,17 +99,43 @@ const ScrollDirection = {
 export const InfiniteScroll = memo(() => {
 	const [items1, setItems1] = useState([]);
 	const [items2, setItems2] = useState([]);
-	const [isSetItems1, setIsSetItems1] = useState(true);
+	const [isItem1OnTop, setIsItem1OnTop] = useState(false);
 	const [start, setStart] = useState(0);
 	const [end, setEnd] = useState(0);
 	const topRef = useRef();
 	const bottomRef = useRef();
 	const [bottomMarginTop, setBottomMarginTop] = useState(20);
+	const [topMarginTop, setTopMarginTop] = useState(0);
 
-	const handleTopIntersection = useCallback(async () => {}, []);
+	const handleTopIntersection = useCallback(async () => {
+		if (topMarginTop === 0) return;
+		const { chunk } = await db(getItem).load(start, 10);
+		if (!isItem1OnTop) {
+			setItems2(chunk.map((item, idx) => {
+				return {
+					...item,
+					order: start+idx,
+				}
+			}));	
+		} else {
+			setItems1(chunk.map((item, idx) => {
+				return {
+					...item,
+					order: start+idx,
+				}
+			}));	
+		}
+
+		setTopMarginTop(getTranslateY(start));
+		setBottomMarginTop(getTranslateY(start + 19));
+		setEnd(start + 20);
+		setStart(start >= 10 ? start - 10 : 0);
+		setIsItem1OnTop(is => !is);
+	}, [topMarginTop, start, isItem1OnTop]);
 	const handleBottomIntersection = useCallback(async () => {
+		if (end === 100) return;
 		const { chunk } = await db(getItem).load(end, 10);
-		if (isSetItems1) {
+		if (!isItem1OnTop) {
 			setItems1(chunk.map((item, idx) => {
 				return {
 					...item,
@@ -122,9 +151,17 @@ export const InfiniteScroll = memo(() => {
 			}));	
 		}
 		setBottomMarginTop(getTranslateY(end + 9));
+		if (end > 9) {
+			setTopMarginTop(getTranslateY(end - 10));
+		}
+		setStart(end - 20 >= 0 ? end - 20 : 0);
 		setEnd(end => end + 10);
-		setIsSetItems1(b => !b)
-	}, [end, isSetItems1]);
+		setIsItem1OnTop(is => !is);
+	}, [end, isItem1OnTop]);
+
+	useEffect(() => {
+		console.log(`${start}-${end}`);
+	}, [end, start])
 
 	const update = useCallback(async(trigger) => {
 		switch(trigger) {
@@ -161,7 +198,7 @@ export const InfiniteScroll = memo(() => {
 	}, [update]);
 
 	return <ScrollWrapper>
-		<TopObserver ref={topRef} />
+		<TopObserver ref={topRef} $marginTop={topMarginTop}/>
 		{!!items1?.length && items1.map((item, idx) => <Card {...item} key={idx} translateY={getTranslateY(item.order)} />)}
 		{!!items2?.length && items2.map((item, idx) => <Card {...item} key={idx} translateY={getTranslateY(item.order)} />)}
 		<BottomObserver ref={bottomRef} $marginTop={bottomMarginTop}/>
