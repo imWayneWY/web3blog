@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useNavigate } from "react-router-dom";
 import Pinterest from "./../assets/system-design/Pinterest.jpeg";
 import FaceBook from "./../assets/system-design/Facebook.jpg";
+import InfiniteScroll from "./../assets/system-design/InfiniteScroll.jpg";
 
 const SystemDesignList = styled(List)`
 	width: 100%;
@@ -21,6 +22,12 @@ export const SystemDesigns = [
 		url: "/facebook",
 		id: 1,
 		asset: FaceBook
+	},
+	{
+		title: "Infinite Scroll",
+		url: "/InfiniteScroll",
+		id: 2,
+		asset: InfiniteScroll
 	}
 ]
 
