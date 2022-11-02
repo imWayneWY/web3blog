@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/web3blog/static/css/main.6b00c0eb.css",
-    "main.js": "/web3blog/static/js/main.2c65672a.js",
+    "main.js": "/web3blog/static/js/main.6e582e67.js",
     "static/js/787.847c5c31.chunk.js": "/web3blog/static/js/787.847c5c31.chunk.js",
     "static/media/Facebook.jpg": "/web3blog/static/media/Facebook.f1a3a6cebed79e3e4719.jpg",
     "static/media/Pinterest.jpeg": "/web3blog/static/media/Pinterest.0d728c93e11595d625f7.jpeg",
@@ -12,11 +12,11 @@
     "static/media/MetaMask.svg": "/web3blog/static/media/MetaMask.f115d0029e1891b4010c676336995d0c.svg",
     "index.html": "/web3blog/index.html",
     "main.6b00c0eb.css.map": "/web3blog/static/css/main.6b00c0eb.css.map",
-    "main.2c65672a.js.map": "/web3blog/static/js/main.2c65672a.js.map",
+    "main.6e582e67.js.map": "/web3blog/static/js/main.6e582e67.js.map",
     "787.847c5c31.chunk.js.map": "/web3blog/static/js/787.847c5c31.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.6b00c0eb.css",
-    "static/js/main.2c65672a.js"
+    "static/js/main.6e582e67.js"
   ]
 }
