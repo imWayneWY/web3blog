@@ -5,6 +5,7 @@ export const useWallet = () => {
 	const [selectedAddress, setSelectedAddress] = useState();
 	const [provider, setProvider] = useState();
 	const [signer, setSigner] = useState();
+	const [hasEthereum, setHasEethereum] = useState(false);
 
 	useEffect(() => {
 		const getSelectedAddress = async () => {
@@ -18,6 +19,7 @@ export const useWallet = () => {
 		}
 		// Getting new wallet provider...
 		if (window.ethereum) {
+			setHasEethereum(true);
 			const provider = new ethers.providers.Web3Provider(window.ethereum);
 			setProvider(provider);
 			getSelectedAddress();
@@ -56,5 +58,6 @@ export const useWallet = () => {
 		selectedAddress,
 		provider,
 		signer,
+		hasEthereum
 	}
 }

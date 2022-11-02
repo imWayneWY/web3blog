@@ -258,7 +258,7 @@ export const Calendar = memo(() => {
 
 	const items = useMemo(() => currentDay ? events.filter(e => new Date(e.startTime.toNumber()).toDateString() === currentDay.toDateString()) : [], [currentDay, events]);
 
-	return <AuthWrapper>
+	return <AuthWrapper needAddress>
 		<MonthView
 			fulldays={fullDays}
 			month={currentDay.getMonth()}

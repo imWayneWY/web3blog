@@ -218,7 +218,7 @@ export const Jira = memo(() => {
 		}
 	}, [tasks, contract]);
 
-	return <AuthWrapper>
+	return <AuthWrapper needAddress>
 		<Wrapper>
 			<Header>
 				<h4>Todo</h4>

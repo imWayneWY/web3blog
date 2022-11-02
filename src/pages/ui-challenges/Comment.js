@@ -190,7 +190,7 @@ export const Comment = memo(() => {
 		}
 	});
 
-	return <AuthWrapper>
+	return <AuthWrapper needAddress>
 		<CommentInput onSubmit={submitComment} referInfo={referInfo}  clearRefer={() => setReferId(0)} />
 		<CommentList list={comments} setReferId={setReferId}/>
 	</AuthWrapper>;

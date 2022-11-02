@@ -93,7 +93,7 @@ export const Todo = memo(() => {
 		contract.deleteTask(taksId);
 	}, [contract]);
 	
-	return <AuthWrapper>
+	return <AuthWrapper needAddress>
 			<Container>
 			{tasks.length
 				? <ul>

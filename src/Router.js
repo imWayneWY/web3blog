@@ -15,6 +15,7 @@ import { Giphy } from "./pages/ui-challenges/Giphy";
 import { Comment } from "./pages/ui-challenges/Comment";
 import { TicTacToe } from "./pages/ui-challenges/TicTacToe";
 import { InfiniteScroll } from "./pages/ui-challenges/InfiniteScroll";
+import { Welcome } from "./pages/Welcome";
 
 export const Router = memo(() => {
 	return <Routes>

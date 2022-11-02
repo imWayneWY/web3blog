@@ -75,7 +75,7 @@ export const Post = () => {
 		}
  	}, [contract, selectedAddress, title, value]);
 	return (
-		<AuthWrapper>
+		<AuthWrapper needAddress>
 			<TextInput placeholder="Input your blog title" onChange={handleUpdate} value={title} />
 			<MDEditor
 				height='90%'

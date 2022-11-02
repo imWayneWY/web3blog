@@ -1,12 +1,14 @@
 import { useWallet } from "../hooks/useWallet";
-import {memo} from "react";
+import {memo, useMemo} from "react";
 import { Welcome } from "../pages/Welcome";
 
-export const AuthWrapper = memo(({children}) => {
-	const { selectedAddress } = useWallet();
+export const AuthWrapper = memo(({children, needAddress=false}) => {
+	const { selectedAddress, hasEthereum } = useWallet();
+	const showWelcome = useMemo(() => !hasEthereum || (needAddress && !selectedAddress), [hasEthereum, needAddress, selectedAddress]);
+	
 	return <>{
-		selectedAddress
-		? {children}
-		: <Welcome />
+		showWelcome
+		? <Welcome />
+		: children
 	}</>
 });
