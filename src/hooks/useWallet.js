@@ -8,9 +8,13 @@ export const useWallet = () => {
 
 	useEffect(() => {
 		const getSelectedAddress = async () => {
-			const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
-			const userAddress = ethers.utils.getAddress(accounts[0]);
-			setSelectedAddress(userAddress);
+			try {
+				const accounts = await window.ethereum.request({ method: "eth_requestAccounts" });
+				const userAddress = ethers.utils.getAddress(accounts[0]);
+				setSelectedAddress(userAddress);
+			} catch(err) {
+				console.warn("user not willing to connect", err);
+			}
 		}
 		// Getting new wallet provider...
 		if (window.ethereum) {

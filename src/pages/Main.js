@@ -7,21 +7,21 @@ import { Pagination, Box } from "grommet";
 import { BlogAddress } from "../utils/address";
 
 export const Main = memo(() => {
-	const { signer } = useWallet();
+	const { provider } = useWallet();
 	const [contract, setContract] = useState();
 	const [items, setItems] = useState([]);
 	const [totalBlogsCount, setTotalBlogsCount] = useState(0);
 	const [currentPage, setCurrentPage] = useState(1);
 
 	useEffect(() => {
-		if (!signer) return;
+		if (!provider) return;
 		const BlogContract = new ethers.Contract(
 			BlogAddress,
 			BlogAbi.abi,
-			signer
+			provider
 		)
 		setContract(BlogContract);
-	}, [signer]);
+	}, [provider]);
 
 	useEffect(() => {
 		if (!contract) return;

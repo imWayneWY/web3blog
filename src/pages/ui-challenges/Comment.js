@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useWallet } from "../../hooks/useWallet";
 import { CommentContractAddress } from "../../utils/address";
 import CommentAbi from "../../abi/Comment.json";
+import { AuthWrapper } from "../../components/AuthWrapper";
 
 const InputWrapper = styled.div`
 	width: 100%;
@@ -189,10 +190,10 @@ export const Comment = memo(() => {
 		}
 	});
 
-	return <>
+	return <AuthWrapper>
 		<CommentInput onSubmit={submitComment} referInfo={referInfo}  clearRefer={() => setReferId(0)} />
 		<CommentList list={comments} setReferId={setReferId}/>
-	</>;
+	</AuthWrapper>;
 });
 
 function getDateString(time) {

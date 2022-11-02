@@ -4,6 +4,7 @@ import { useWallet } from "../../hooks/useWallet";
 import TasksAbi from "../../abi/Tasks.json";
 import styled, { css } from "styled-components";
 import { TasksContractAddress } from "../../utils/address";
+import { AuthWrapper } from "../../components/AuthWrapper";
 
 const Container = styled.div`
 	height: 100%;
@@ -92,19 +93,21 @@ export const Todo = memo(() => {
 		contract.deleteTask(taksId);
 	}, [contract]);
 	
-	return <Container>
-		{tasks.length
-			? <ul>
-				{tasks.map(task => <li key={task[0].toString()}>
-					<CheckBox onChange={e => {
-						!task[3] && deleteTask(task[0]);
-					}} defaultChecked={task[3]} readOnly={task[3]} disabled={task[3]}/>
-					<Title $isDeleted={task[3]}>{task[2]}</Title>
-				</li>)}
-			</ul>
-			: <p>Your tasks is empty.</p>}
-		<Input placeholder="Enter you task here" onChange={handleUpdate} value={value} />
-		<Submit onClick={addNewTask}>Submit</Submit>
-		{msg && <Msg>{msg}</Msg>}
-	</Container>;
+	return <AuthWrapper>
+			<Container>
+			{tasks.length
+				? <ul>
+					{tasks.map(task => <li key={task[0].toString()}>
+						<CheckBox onChange={e => {
+							!task[3] && deleteTask(task[0]);
+						}} defaultChecked={task[3]} readOnly={task[3]} disabled={task[3]}/>
+						<Title $isDeleted={task[3]}>{task[2]}</Title>
+					</li>)}
+				</ul>
+				: <p>Your tasks is empty.</p>}
+			<Input placeholder="Enter you task here" onChange={handleUpdate} value={value} />
+			<Submit onClick={addNewTask}>Submit</Submit>
+			{msg && <Msg>{msg}</Msg>}
+		</Container>
+	</AuthWrapper>;
 });

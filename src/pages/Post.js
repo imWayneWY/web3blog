@@ -9,6 +9,7 @@ import BlogAbi from "../abi/Web3BlogOwner.json";
 import GuestAbi from "../abi/Web3BlogGuest.json";
 import { BlogAddress, GuestBlogAddress } from "../utils/address";
 import { ethers } from "ethers";
+import { AuthWrapper } from "../components/AuthWrapper";
 
 const projectId = process.env.REACT_APP_PROJECT_ID;
 const projectSecret = process.env.REACT_APP_PROJECT_SECRET;
@@ -74,7 +75,7 @@ export const Post = () => {
 		}
  	}, [contract, selectedAddress, title, value]);
 	return (
-		<>
+		<AuthWrapper>
 			<TextInput placeholder="Input your blog title" onChange={handleUpdate} value={title} />
 			<MDEditor
 				height='90%'
@@ -82,6 +83,6 @@ export const Post = () => {
 				onChange={setValue}
 			/>
 			<PostButton label="POST" color="neutral-3" primary size="large" onClick={handlePost} />
-		</>
+		</AuthWrapper>
 	);
 }

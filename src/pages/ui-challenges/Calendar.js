@@ -4,6 +4,7 @@ import styled, { css } from "styled-components";
 import CalendarAbi from "../../abi/Calendar.json";
 import { useWallet } from "../../hooks/useWallet";
 import { CalendarContractAddress } from "../../utils/address";
+import { AuthWrapper } from "../../components/AuthWrapper";
 
 const MonthHeader = styled.div`
 	display: flex;
@@ -257,7 +258,7 @@ export const Calendar = memo(() => {
 
 	const items = useMemo(() => currentDay ? events.filter(e => new Date(e.startTime.toNumber()).toDateString() === currentDay.toDateString()) : [], [currentDay, events]);
 
-	return <>
+	return <AuthWrapper>
 		<MonthView
 			fulldays={fullDays}
 			month={currentDay.getMonth()}
@@ -265,7 +266,7 @@ export const Calendar = memo(() => {
 			setCurrentDay={setCurrentDay}
 		/>
 		<DayView items = {items} currentDay={currentDay} contract={contract} />
-	</>;
+	</AuthWrapper>;
 });
 
 function getFullDays(currentDay) {

@@ -9,7 +9,7 @@ import { BlogAddress, GuestBlogAddress } from "../utils/address";
 
 
 export const Detail = memo(() => {
-	const { signer } = useWallet();
+	const { provider } = useWallet();
 	const [contract, setContract] = useState();
 	const [date, setDate] = useState();
 	const [value, setValue] = useState("");
@@ -19,23 +19,23 @@ export const Detail = memo(() => {
 	const location = useLocation();
 
 	useEffect(() => {
-		if (!signer || location.state.isOwner === undefined) return;
+		if (!provider || location.state.isOwner === undefined) return;
 		if (location.state.isOwner) {
 			const BlogContract = new ethers.Contract(
 				BlogAddress,
 				BlogAbi.abi,
-				signer
+				provider
 			)
 			setContract(BlogContract);
 		} else {
 			const BlogContractGuest = new ethers.Contract(
 				GuestBlogAddress,
 				GuestAbi.abi,
-				signer
+				provider
 			)
 			setContract(BlogContractGuest);
 		}
-	}, [signer, location.state.isOwner]);
+	}, [provider, location.state.isOwner]);
 
 	useEffect(() => {
 		if (!contract) return;

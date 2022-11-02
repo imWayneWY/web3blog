@@ -67,9 +67,10 @@ function App() {
             </Nav>
           </Sidebar>
           <Content pad="medium" overflow="auto" height="100vh">
-            {
+            {/* {
               selectedAddress ? <Router /> : <Welcome />
-            }
+            } */}
+            <Router />
           </Content>
         </Box>
       </Grommet>

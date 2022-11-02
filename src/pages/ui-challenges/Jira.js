@@ -4,6 +4,7 @@ import { JiraContractAddress } from "../../utils/address";
 import { useWallet } from "../../hooks/useWallet";
 import { ethers } from "ethers";
 import JiraAbi from "../../abi/JIRA.json";
+import { AuthWrapper } from "../../components/AuthWrapper";
 
 // match with JIRA status
 const Status = {
@@ -217,33 +218,35 @@ export const Jira = memo(() => {
 		}
 	}, [tasks, contract]);
 
-	return <Wrapper>
-		<Header>
-			<h4>Todo</h4>
-			<h4>In Progress</h4>
-			<h4>Finish</h4>
-		</Header>
-		<Columns>
-			<Column onDragOver={allowDragOver} onDrop={(e) => setStatus(e, Status.TODO)}>
-				{
-					tasks.filter(task => task.status === Status.TODO && !task.isDragging).map((task) => <TaskCard key={task.id} task={task} handleClick={() => setViewTask(task)} />)
-				}
-			</Column>
-			<Column onDragOver={allowDragOver} onDrop={(e) => setStatus(e, Status.INPROGRESS)}>
-				{
-					tasks.filter(task => task.status === Status.INPROGRESS && !task.isDragging).map((task) => <TaskCard key={task.id} task={task} handleClick={() => setViewTask(task)} />)
-				}
-			</Column>
-			<Column onDragOver={allowDragOver} onDrop={(e) => setStatus(e, Status.FINISH)}>
-				{
-					tasks.filter(task => task.status === Status.FINISH && !task.isDragging).map((task) => <TaskCard key={task.id} task={task} handleClick={() => setViewTask(task)} />)
-				}
-			</Column>
-		</Columns>
-		<CreateBtn onClick={() => setIsCreatePanelOpened(true)}>CREATE</CreateBtn>
-		{ isCreatePanelOpened && <CreatePanel onCreate={createTicket} onClose={() => setIsCreatePanelOpened(false)} />}
-		{ !!viewTask && <TaskDetail task={viewTask} onClose={() => setViewTask(null)}/>}
-	</Wrapper>
+	return <AuthWrapper>
+		<Wrapper>
+			<Header>
+				<h4>Todo</h4>
+				<h4>In Progress</h4>
+				<h4>Finish</h4>
+			</Header>
+			<Columns>
+				<Column onDragOver={allowDragOver} onDrop={(e) => setStatus(e, Status.TODO)}>
+					{
+						tasks.filter(task => task.status === Status.TODO && !task.isDragging).map((task) => <TaskCard key={task.id} task={task} handleClick={() => setViewTask(task)} />)
+					}
+				</Column>
+				<Column onDragOver={allowDragOver} onDrop={(e) => setStatus(e, Status.INPROGRESS)}>
+					{
+						tasks.filter(task => task.status === Status.INPROGRESS && !task.isDragging).map((task) => <TaskCard key={task.id} task={task} handleClick={() => setViewTask(task)} />)
+					}
+				</Column>
+				<Column onDragOver={allowDragOver} onDrop={(e) => setStatus(e, Status.FINISH)}>
+					{
+						tasks.filter(task => task.status === Status.FINISH && !task.isDragging).map((task) => <TaskCard key={task.id} task={task} handleClick={() => setViewTask(task)} />)
+					}
+				</Column>
+			</Columns>
+			<CreateBtn onClick={() => setIsCreatePanelOpened(true)}>CREATE</CreateBtn>
+			{ isCreatePanelOpened && <CreatePanel onCreate={createTicket} onClose={() => setIsCreatePanelOpened(false)} />}
+			{ !!viewTask && <TaskDetail task={viewTask} onClose={() => setViewTask(null)}/>}
+		</Wrapper>
+	</AuthWrapper>
 });
 
 
