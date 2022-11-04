@@ -8,7 +8,7 @@ import { BlogAddress } from "../utils/address";
 import { AuthWrapper } from "../components/AuthWrapper";
 
 export const Main = memo(() => {
-	const { provider, hasEthereum } = useWallet();
+	const { provider } = useWallet();
 	const [contract, setContract] = useState();
 	const [items, setItems] = useState([]);
 	const [totalBlogsCount, setTotalBlogsCount] = useState(0);

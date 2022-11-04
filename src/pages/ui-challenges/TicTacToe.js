@@ -317,7 +317,7 @@ export const TicTacToe = memo(() => {
 	const reset = useCallback(() => {
 		setState([...INIT_STATE]);
 		setWinner("");
-	})
+	}, []);
 
 	return <>
 		{winner && <WinnerBanner winner={winner} reset={reset}/>}
