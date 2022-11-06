@@ -6,6 +6,7 @@ import Pinterest from "./../assets/system-design/Pinterest.jpeg";
 import FaceBook from "./../assets/system-design/Facebook.jpg";
 import InfiniteScroll from "./../assets/system-design/InfiniteScroll.jpg";
 import Messenger from "./../assets/system-design/Messenger.jpeg";
+import ProgressBar from "./../assets/system-design/ProgressBar.jpeg"
 
 const SystemDesignList = styled(List)`
 	width: 100%;
@@ -35,6 +36,12 @@ export const SystemDesigns = [
 		url: "/messenger",
 		id: 3,
 		asset: Messenger
+	},
+	{
+		title: "Progress Bar",
+		url: "/progress-bar",
+		id: 4,
+		asset: ProgressBar
 	}
 ]
 
