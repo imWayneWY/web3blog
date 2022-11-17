@@ -7,6 +7,7 @@ import FaceBook from "./../assets/system-design/Facebook.jpg";
 import InfiniteScroll from "./../assets/system-design/InfiniteScroll.jpg";
 import Messenger from "./../assets/system-design/Messenger.jpeg";
 import ProgressBar from "./../assets/system-design/ProgressBar.jpeg"
+import TypeaheadWidget from "./../assets/system-design/TypeaheadWidget.jpeg";
 
 const SystemDesignList = styled(List)`
 	width: 100%;
@@ -42,7 +43,14 @@ export const SystemDesigns = [
 		url: "/progress-bar",
 		id: 4,
 		asset: ProgressBar
+	},
+	{
+		title: "Typeahead Widget",
+		url: "/typeahead-widget",
+		id: 5,
+		asset: TypeaheadWidget
 	}
+
 ]
 
 export const SystemDesign = memo(() => {
