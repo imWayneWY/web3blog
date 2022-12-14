@@ -8,6 +8,7 @@ import InfiniteScroll from "./../assets/system-design/InfiniteScroll.jpg";
 import Messenger from "./../assets/system-design/Messenger.jpeg";
 import ProgressBar from "./../assets/system-design/ProgressBar.jpeg"
 import TypeaheadWidget from "./../assets/system-design/TypeaheadWidget.jpeg";
+import TodoApp from "./../assets/system-design/Todo.jpg";
 
 const SystemDesignList = styled(List)`
 	width: 100%;
@@ -49,8 +50,13 @@ export const SystemDesigns = [
 		url: "/typeahead-widget",
 		id: 5,
 		asset: TypeaheadWidget
+	},
+	{
+		title: "Todo App",
+		url: "/todo-app",
+		id: 6,
+		asset: TodoApp	
 	}
-
 ]
 
 export const SystemDesign = memo(() => {
