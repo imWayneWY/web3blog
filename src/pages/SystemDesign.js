@@ -9,6 +9,7 @@ import Messenger from "./../assets/system-design/Messenger.jpeg";
 import ProgressBar from "./../assets/system-design/ProgressBar.jpeg"
 import TypeaheadWidget from "./../assets/system-design/TypeaheadWidget.jpeg";
 import TodoApp from "./../assets/system-design/Todo.jpg";
+import Rating from "./../assets/system-design/rating.jpeg";
 
 const SystemDesignList = styled(List)`
 	width: 100%;
@@ -56,6 +57,12 @@ export const SystemDesigns = [
 		url: "/todo-app",
 		id: 6,
 		asset: TodoApp	
+	},
+	{
+		title: "Rating Widget",
+		url: "/rating-widget",
+		id: 7,
+		asset: Rating
 	}
 ]
 
