@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/web3blog/static/css/main.6b00c0eb.css",
-    "main.js": "/web3blog/static/js/main.0bd2537c.js",
+    "main.js": "/web3blog/static/js/main.67fc73e0.js",
     "static/js/787.847c5c31.chunk.js": "/web3blog/static/js/787.847c5c31.chunk.js",
     "static/media/Todo.jpg": "/web3blog/static/media/Todo.e3b5ebdd96612dfc9384.jpg",
     "static/media/Facebook.jpg": "/web3blog/static/media/Facebook.f1a3a6cebed79e3e4719.jpg",
@@ -11,15 +11,16 @@
     "static/media/Messenger.jpeg": "/web3blog/static/media/Messenger.120b486c7f1cedf15a45.jpeg",
     "static/media/ProgressBar.jpeg": "/web3blog/static/media/ProgressBar.cea840da3b05a1634b39.jpeg",
     "static/media/TypeaheadWidget.jpeg": "/web3blog/static/media/TypeaheadWidget.f17609d953ff6c46d07e.jpeg",
+    "static/media/rating.jpeg": "/web3blog/static/media/rating.adfbae72800c65b12607.jpeg",
     "static/media/Avatar.jpeg": "/web3blog/static/media/Avatar.4b8d62644d6a66b95ff5.jpeg",
     "static/media/MetaMask.svg": "/web3blog/static/media/MetaMask.f115d0029e1891b4010c676336995d0c.svg",
     "index.html": "/web3blog/index.html",
     "main.6b00c0eb.css.map": "/web3blog/static/css/main.6b00c0eb.css.map",
-    "main.0bd2537c.js.map": "/web3blog/static/js/main.0bd2537c.js.map",
+    "main.67fc73e0.js.map": "/web3blog/static/js/main.67fc73e0.js.map",
     "787.847c5c31.chunk.js.map": "/web3blog/static/js/787.847c5c31.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.6b00c0eb.css",
-    "static/js/main.0bd2537c.js"
+    "static/js/main.67fc73e0.js"
   ]
 }
