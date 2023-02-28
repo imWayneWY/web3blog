@@ -10,6 +10,7 @@ import ProgressBar from "./../assets/system-design/ProgressBar.jpeg"
 import TypeaheadWidget from "./../assets/system-design/TypeaheadWidget.jpeg";
 import TodoApp from "./../assets/system-design/Todo.jpg";
 import Rating from "./../assets/system-design/rating.jpeg";
+import PollWidget from "./../assets/system-design/PollWidget.jpg";
 
 const SystemDesignList = styled(List)`
 	width: 100%;
@@ -63,6 +64,12 @@ export const SystemDesigns = [
 		url: "/rating-widget",
 		id: 7,
 		asset: Rating
+	},
+	{
+		title: "Poll Widget",
+		url: "/poll-widget",
+		id: 8,
+		asset: PollWidget
 	}
 ]
 
