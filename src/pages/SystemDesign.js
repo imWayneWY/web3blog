@@ -11,6 +11,9 @@ import TypeaheadWidget from "./../assets/system-design/TypeaheadWidget.jpeg";
 import TodoApp from "./../assets/system-design/Todo.jpg";
 import Rating from "./../assets/system-design/rating.jpeg";
 import PollWidget from "./../assets/system-design/PollWidget.jpg";
+import CarouselWidget from "./../assets/system-design/Carousel.jpg";
+import Twitter from "./../assets/system-design/Twitter.jpg";
+import QRcode from "./../assets/system-design/QRcode.jpg";
 
 const SystemDesignList = styled(List)`
 	width: 100%;
@@ -70,6 +73,24 @@ export const SystemDesigns = [
 		url: "/poll-widget",
 		id: 8,
 		asset: PollWidget
+	},
+	{
+		title: "Carousel Widget",
+		url: "/carousel-widget",
+		id: 9,
+		asset: CarouselWidget
+	},
+	{
+		title: "Twitter",
+		url: "/twitter",
+		id: 10,
+		asset: Twitter
+	},
+	{
+		title: "QR Code",
+		url: "/qr-code",
+		id: 11,
+		asset: QRcode
 	}
 ]
 
